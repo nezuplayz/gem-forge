@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gem Forge - Micro Earning Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gem: {
+                            purple: '#8b5cf6',
+                            violet: '#6d28d9',
+                            gold: '#fbbf24',
+                            amber: '#f59e0b',
+                            dark: '#0f0728',
+                            card: '#1a103c',
+                            cardBorder: '#2e1c66'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+        }
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-gem-dark text-slate-100 font-sans min-h-full flex flex-col justify-between pb-12">
+
+    <!-- Top Navigation / Header -->
+    <header class="sticky top-0 z-30 bg-gem-dark/90 backdrop-blur-md border-b border-gem-cardBorder px-4 py-3 sm:px-8">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-amber-400 p-0.5 shadow-lg shadow-purple-900/40">
+                    <div class="w-full h-full bg-gem-dark rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-gem text-amber-400 text-lg animate-float"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-amber-300 via-purple-300 to-amber-400 bg-clip-text text-transparent">
+                        GEM FORGE
+                    </h1>
+                    <p class="text-[10px] text-purple-300/70 font-semibold tracking-widest uppercase">Micro-Rewards Engine</p>
+                </div>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="flex items-center gap-2 bg-gem-card/80 border border-gem-cardBorder px-3 py-1.5 rounded-full">
+                <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-xs font-bold">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <span class="text-xs font-medium text-slate-200">Alex_UK</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto w-full px-4 pt-6 space-y-6">
+
+        <!-- Banner Announcement -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-900/60 via-gem-card to-amber-900/30 border border-gem-cardBorder p-5 sm:p-6 glow-purple">
+            <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">Daily Bonus Active</span>
+                    <h2 class="text-xl sm:text-2xl font-bold mt-2 text-white">Forge Gems, Unlock Rewards</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-md">Complete micro-tasks, invite friends, and watch your Gem balance stack up instantly!</p>
+                </div>
+                <button onclick="openTaskModal()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 glow-gold">
+                    <i class="fa-solid fa-bolt text-base"></i>
+                    Complete Tasks
+                </button>
+            </div>
+        </div>
+
+        <!-- Top Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Gems Balance Card -->
+            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 relative overflow-hidden group">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Gems Balance</p>
+                        <div class="flex items-baseline gap-2 mt-2">
+                            <span id="gemBalance" class="text-3xl font-extrabold text-amber-400 tracking-tight">1,250</span>
+                            <span class="text-xs font-semibold text-amber-300/80">Gems</span>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-gem text-xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                    <span class="text-slate-400">Est. Cash Value:</span>
+                    <span id="cashValue" class="font-bold text-emerald-400">£12.50</span>
+                </div>
+            </div>
+
+            <!-- Completed Tasks Counter Card -->
+            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Tasks Completed</p>
+                        <div class="flex items-baseline gap-2 mt-2">
+                            <span id="completedTasksCount" class="text-3xl font-extrabold text-purple-300 tracking-tight">8</span>
+                            <span class="text-xs font-semibold text-purple-400">done</span>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                        <i class="fa-solid fa-circle-check text-xl"></i>
+                    </div>
+                </div>
+                <!-- Progress Bar -->
+                <div class="mt-4 pt-3 border-t border-slate-800/80">
+                    <div class="flex justify-between text-[11px] mb-1">
+                        <span class="text-slate-400">Daily Goal Progress</span>
+                        <span id="progressPercentText" class="text-purple-300 font-semibold">80%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-purple-500 to-amber-400 rounded-full transition-all duration-500" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Code Card -->
+            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Friend Invite Code</p>
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-center gap-2">
+                        <code class="bg-slate-950 border border-slate-800 text-amber-300 px-3 py-1.5 rounded-lg text-sm font-mono font-bold tracking-widest flex-1 text-center">FORGE-99</code>
+                        <button onclick="copyReferralCode()" class="bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 px-3 py-1.5 rounded-lg text-xs font-medium transition active:scale-95">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-3">Earn <span class="text-amber-400 font-semibold">+100 Gems</span> for every friend who joins!</p>
+            </div>
+        </div>
+
+        <!-- Micro-Tasks Section (Featured Inline Feed) -->
+        <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 sm:p-6 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-gem-cardBorder">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-purple-400"></i> Available Micro-Tasks
+                    </h3>
+                    <p class="text-xs text-slate-400">Click tasks to earn instant Gems</p>
+                </div>
+                <button onclick="openTaskModal()" class="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1">
+                    View All <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- Inline Tasks List -->
+            <div id="inlineTaskList" class="space-y-3">
+                <!-- Javascript will insert tasks here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-gem-card border border-gem-cardBorder rounded-2xl w-full max-w-lg p-6 shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] flex flex-col" id="modalContainer">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center pb-4 border-b border-gem-cardBorder">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Tasks Center
+                    </h3>
+                    <p class="text-xs text-slate-400">Complete actions below to claim instant rewards</p>
+                </div>
+                <button onclick="closeTaskModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800/50">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Task Items Container -->
+            <div id="modalTaskList" class="overflow-y-auto my-4 space-y-3 pr-1 flex-1">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="pt-3 border-t border-gem-cardBorder flex justify-between items-center text-xs text-slate-400">
+                <span>New tasks refresh in: <strong class="text-purple-300 font-mono">04:12:30</strong></span>
+                <button onclick="closeTaskModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gem-card border border-amber-400/40 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-gem"></i>
+        </div>
+        <div>
+            <p id="toastTitle" class="text-xs font-bold text-amber-300">Reward Claimed!</p>
+            <p id="toastMessage" class="text-xs text-slate-300">+50 Gems added to your balance</p>
+        </div>
+    </div>
+
+    <script>
+        // Initial Application State
+        let state = {
+            gems: 1250,
+            completedTasks: 8,
+            totalDailyGoal: 10,
+            tasks: [
+                { id: 1, title: 'Daily Check-in', reward: 50, icon: 'fa-calendar-check', color: 'text-emerald-400', desc: 'Claim your daily login bonus reward.', completed: false },
+                { id: 2, title: 'Watch Short Video Ad', reward: 100, icon: 'fa-circle-play', color: 'text-indigo-400', desc: 'Watch a 15-second sponsor clip.', completed: false },
+                { id: 3, title: 'Complete Quick Quiz', reward: 150, icon: 'fa-brain', color: 'text-amber-400', desc: 'Answer 3 basic trivia questions.', completed: false },
+                { id: 4, title: 'Invite a Friend', reward: 200, icon: 'fa-user-plus', color: 'text-purple-400', desc: 'Share your code with a classmate.', completed: false },
+                { id: 5, title: 'Follow Gem Forge on X', reward: 75, icon: 'fa-hashtag', color: 'text-sky-400', desc: 'Stay updated on new features.', completed: false }
+            ]
+        };
+
+        // Web Audio API Sound Effects Synthesizer
+        function playRewardSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                
+                // Play a two-tone chiming sound
+                const now = ctx.currentTime;
+                
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(523.25, now); // C5
+                osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+                gain1.gain.setValueAtTime(0.3, now);
+                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                
+                osc1.start(now);
+                osc1.stop(now + 0.3);
+
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'triangle';
+                osc2.frequency.setValueAtTime(783.99, now + 0.1); // G5
+                osc2.frequency.exponentialRampToValueAtTime(1046.50, now + 0.25); // C6
+                gain2.gain.setValueAtTime(0.2, now + 0.1);
+                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+
+                osc2.start(now + 0.1);
+                osc2.stop(now + 0.4);
+            } catch (e) {
+                console.log('Audio disabled or unsupported');
+            }
+        }
+
+        // Render Tasks in HTML
+        function renderTasks() {
+            const inlineList = document.getElementById('inlineTaskList');
+            const modalList = document.getElementById('modalTaskList');
+
+            inlineList.innerHTML = '';
+            modalList.innerHTML = '';
+
+            state.tasks.forEach(task => {
+                const taskHTML = `
+                    <div class="flex items-center justify-between p-3.5 rounded-xl border transition-all ${task.completed ? 'bg-slate-900/40 border-slate-800/80 opacity-60' : 'bg-gem-card/80 hover:bg-slate-800/60 border-gem-cardBorder hover:border-purple-500/40'}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center ${task.color}">
+                                <i class="fa-solid ${task.icon} text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-white">${task.title}</h4>
+                                <p class="text-xs text-slate-400">${task.desc}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                <i class="fa-solid fa-gem text-[10px]"></i> +${task.reward}
+                            </span>
+                            <button onclick="completeTask(${task.id})" 
+                                ${task.completed ? 'disabled' : ''} 
+                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95 ${task.completed ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 cursor-default' : 'bg-purple-600 hover:bg-purple-500 text-white shadow-md shadow-purple-900/30'}">
+                                ${task.completed ? '<i class="fa-solid fa-check"></i> Done' : 'Claim'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                inlineList.innerHTML += taskHTML;
+                modalList.innerHTML += taskHTML;
+            });
+        }
+
+        // Complete Task Handler
+        function completeTask(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (!task || task.completed) return;
+
+            task.completed = true;
+            state.gems += task.reward;
+            state.completedTasks += 1;
+
+            // Update UI elements
+            updateStatsUI();
+            renderTasks();
+
+            // Trigger Effects
+            playRewardSound();
+            triggerConfetti();
+            showToast('Task Completed!', `+${task.reward} Gems added to balance.`);
+        }
+
+        // Update Header and Counter UI
+        function updateStatsUI() {
+            document.getElementById('gemBalance').innerText = state.gems.toLocaleString();
+            document.getElementById('cashValue').innerText = '£' + (state.gems / 100).toFixed(2);
+            document.getElementById('completedTasksCount').innerText = state.completedTasks;
+
+            const percentage = Math.min(Math.round((state.completedTasks / state.totalDailyGoal) * 100), 100);
+            document.getElementById('progressPercentText').innerText = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+
+        // Trigger Confetti FX
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#8b5cf6', '#fbbf24', '#f59e0b']
+                });
+            }
+        }
+
+        // Toast Notification System
+        function showToast(title, msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Copy Referral Code
+        function copyReferralCode() {
+            const code = "FORGE-99";
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = code;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast("Copied!", "Referral code copied to clipboard.");
+        }
+
+        // Modal Controls
+        function openTaskModal() {
+            const modal = document.getElementById('taskModal');
+            const container = document.getElementById('modalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }
+
+        function closeTaskModal() {
+            const modal = document.getElementById('taskModal');
+            const container = document.getElementById('modalContainer');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Initialize App on Page Load
+        window.onload = function() {
+            renderTasks();
+            updateStatsUI();
+        };
+    </script>
+</body>
+</html>
