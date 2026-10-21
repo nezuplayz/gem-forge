@@ -1,420 +1,351 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gem Forge - Micro Earning Platform</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        gem: {
-                            purple: '#8b5cf6',
-                            violet: '#6d28d9',
-                            gold: '#fbbf24',
-                            amber: '#f59e0b',
-                            dark: '#0f0728',
-                            card: '#1a103c',
-                            cardBorder: '#2e1c66'
-                        }
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gem Forge - Micro-Earning Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gemBg: '#0b0f19',
+            gemCard: '#151c2e',
+            gemBorder: '#2a364f',
+            gemGold: '#fbbf24',
+            gemPurple: '#8b5cf6',
+            gemGreen: '#10b981',
+          }
         }
-    </script>
-    <style>
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-        .glow-gold {
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
-        }
-        .glow-purple {
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0b0f19; color: #f3f4f6; font-family: sans-serif; }
+    .glow-gold { box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); }
+    .glow-purple { box-shadow: 0 0 15px rgba(139, 92, 246, 0.25); }
+  </style>
 </head>
-<body class="bg-gem-dark text-slate-100 font-sans min-h-full flex flex-col justify-between pb-12">
+<body class="min-h-screen flex flex-col justify-between pb-10">
 
-    <!-- Top Navigation / Header -->
-    <header class="sticky top-0 z-30 bg-gem-dark/90 backdrop-blur-md border-b border-gem-cardBorder px-4 py-3 sm:px-8">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-amber-400 p-0.5 shadow-lg shadow-purple-900/40">
-                    <div class="w-full h-full bg-gem-dark rounded-[10px] flex items-center justify-center">
-                        <i class="fa-solid fa-gem text-amber-400 text-lg animate-float"></i>
-                    </div>
-                </div>
-                <div>
-                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-amber-300 via-purple-300 to-amber-400 bg-clip-text text-transparent">
-                        GEM FORGE
-                    </h1>
-                    <p class="text-[10px] text-purple-300/70 font-semibold tracking-widest uppercase">Micro-Rewards Engine</p>
-                </div>
-            </div>
-
-            <!-- Profile Badge -->
-            <div class="flex items-center gap-2 bg-gem-card/80 border border-gem-cardBorder px-3 py-1.5 rounded-full">
-                <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center text-xs font-bold">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <span class="text-xs font-medium text-slate-200">Alex_UK</span>
-            </div>
+  <!-- Header / Navigation -->
+  <header class="bg-gemCard border-b border-gemBorder p-4 sticky top-0 z-30 shadow-lg">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-amber-400 flex items-center justify-center shadow-md">
+          <i class="fa-solid fa-gem text-white text-lg"></i>
         </div>
-    </header>
+        <span class="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-purple-300 to-amber-200">
+          GEM FORGE
+        </span>
+      </div>
 
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto w-full px-4 pt-6 space-y-6">
-
-        <!-- Banner Announcement -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-900/60 via-gem-card to-amber-900/30 border border-gem-cardBorder p-5 sm:p-6 glow-purple">
-            <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <span class="px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">Daily Bonus Active</span>
-                    <h2 class="text-xl sm:text-2xl font-bold mt-2 text-white">Forge Gems, Unlock Rewards</h2>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-md">Complete micro-tasks, invite friends, and watch your Gem balance stack up instantly!</p>
-                </div>
-                <button onclick="openTaskModal()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 glow-gold">
-                    <i class="fa-solid fa-bolt text-base"></i>
-                    Complete Tasks
-                </button>
-            </div>
+      <!-- Balance & Withdraw Button -->
+      <div class="flex items-center space-x-3">
+        <div class="bg-gemBg border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
+          <i class="fa-solid fa-gem text-amber-400"></i>
+          <span id="gemCount" class="font-bold text-amber-300">1,250</span>
+          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">1.25</span>)</span>
         </div>
+        
+        <button onclick="openModal('withdrawModal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-3.5 py-1.5 rounded-lg shadow-md hover:shadow-emerald-500/20 transition flex items-center space-x-1.5 text-sm">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Withdraw</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-        <!-- Top Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            
-            <!-- Gems Balance Card -->
-            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 relative overflow-hidden group">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Gems Balance</p>
-                        <div class="flex items-baseline gap-2 mt-2">
-                            <span id="gemBalance" class="text-3xl font-extrabold text-amber-400 tracking-tight">1,250</span>
-                            <span class="text-xs font-semibold text-amber-300/80">Gems</span>
-                        </div>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
-                        <i class="fa-solid fa-gem text-xl"></i>
-                    </div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
-                    <span class="text-slate-400">Est. Cash Value:</span>
-                    <span id="cashValue" class="font-bold text-emerald-400">£12.50</span>
-                </div>
-            </div>
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto w-full px-4 mt-6 flex-grow space-y-6">
 
-            <!-- Completed Tasks Counter Card -->
-            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 relative overflow-hidden">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Tasks Completed</p>
-                        <div class="flex items-baseline gap-2 mt-2">
-                            <span id="completedTasksCount" class="text-3xl font-extrabold text-purple-300 tracking-tight">8</span>
-                            <span class="text-xs font-semibold text-purple-400">done</span>
-                        </div>
-                    </div>
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-                        <i class="fa-solid fa-circle-check text-xl"></i>
-                    </div>
-                </div>
-                <!-- Progress Bar -->
-                <div class="mt-4 pt-3 border-t border-slate-800/80">
-                    <div class="flex justify-between text-[11px] mb-1">
-                        <span class="text-slate-400">Daily Goal Progress</span>
-                        <span id="progressPercentText" class="text-purple-300 font-semibold">80%</span>
-                    </div>
-                    <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
-                        <div id="progressBar" class="h-full bg-gradient-to-r from-purple-500 to-amber-400 rounded-full transition-all duration-500" style="width: 80%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Referral Code Card -->
-            <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 flex flex-col justify-between">
-                <div>
-                    <div class="flex justify-between items-start">
-                        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Friend Invite Code</p>
-                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">
-                            <i class="fa-solid fa-share-nodes"></i>
-                        </div>
-                    </div>
-                    <div class="mt-2 flex items-center gap-2">
-                        <code class="bg-slate-950 border border-slate-800 text-amber-300 px-3 py-1.5 rounded-lg text-sm font-mono font-bold tracking-widest flex-1 text-center">FORGE-99</code>
-                        <button onclick="copyReferralCode()" class="bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 px-3 py-1.5 rounded-lg text-xs font-medium transition active:scale-95">
-                            <i class="fa-solid fa-copy"></i>
-                        </button>
-                    </div>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-3">Earn <span class="text-amber-400 font-semibold">+100 Gems</span> for every friend who joins!</p>
-            </div>
-        </div>
-
-        <!-- Micro-Tasks Section (Featured Inline Feed) -->
-        <div class="bg-gem-card border border-gem-cardBorder rounded-2xl p-5 sm:p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-gem-cardBorder">
-                <div>
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-purple-400"></i> Available Micro-Tasks
-                    </h3>
-                    <p class="text-xs text-slate-400">Click tasks to earn instant Gems</p>
-                </div>
-                <button onclick="openTaskModal()" class="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1">
-                    View All <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                </button>
-            </div>
-
-            <!-- Inline Tasks List -->
-            <div id="inlineTaskList" class="space-y-3">
-                <!-- Javascript will insert tasks here -->
-            </div>
-        </div>
-    </main>
-
-    <!-- Task Modal -->
-    <div id="taskModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-gem-card border border-gem-cardBorder rounded-2xl w-full max-w-lg p-6 shadow-2xl transform scale-95 transition-transform duration-300 max-h-[90vh] flex flex-col" id="modalContainer">
-            
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center pb-4 border-b border-gem-cardBorder">
-                <div>
-                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Tasks Center
-                    </h3>
-                    <p class="text-xs text-slate-400">Complete actions below to claim instant rewards</p>
-                </div>
-                <button onclick="closeTaskModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800/50">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <!-- Task Items Container -->
-            <div id="modalTaskList" class="overflow-y-auto my-4 space-y-3 pr-1 flex-1">
-                <!-- Rendered dynamically -->
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="pt-3 border-t border-gem-cardBorder flex justify-between items-center text-xs text-slate-400">
-                <span>New tasks refresh in: <strong class="text-purple-300 font-mono">04:12:30</strong></span>
-                <button onclick="closeTaskModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium">Done</button>
-            </div>
-        </div>
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-purple-900/40 via-gemCard to-gemCard border border-gemPurple/30 rounded-2xl p-6 relative overflow-hidden shadow-xl">
+      <div class="relative z-10 max-w-lg space-y-2">
+        <span class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-purple-500/30">
+          🔥 Double Gem Weekend
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Tasks, Earn Rewards</h1>
+        <p class="text-gray-400 text-sm">Finish quick micro-tasks, surveys, and app testing to cash out Robux, PayPal, or Gift Cards.</p>
+        <button onclick="openModal('taskModal')" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
+          <i class="fa-solid fa-list-check"></i>
+          <span>View Available Tasks</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Toast Notification Popup -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gem-card border border-amber-400/40 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center text-sm font-bold">
-            <i class="fa-solid fa-gem"></i>
-        </div>
-        <div>
-            <p id="toastTitle" class="text-xs font-bold text-amber-300">Reward Claimed!</p>
-            <p id="toastMessage" class="text-xs text-slate-300">+50 Gems added to your balance</p>
-        </div>
+    <!-- Quick Stats Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="bg-gemCard border border-gemBorder p-4 rounded-xl flex flex-col justify-between">
+        <span class="text-xs text-gray-400 font-medium">Daily Streak</span>
+        <span class="text-xl font-bold text-amber-400 mt-1"><i class="fa-solid fa-fire text-amber-500 mr-1"></i> 3 Days</span>
+      </div>
+      <div class="bg-gemCard border border-gemBorder p-4 rounded-xl flex flex-col justify-between">
+        <span class="text-xs text-gray-400 font-medium">Completed Tasks</span>
+        <span id="tasksCount" class="text-xl font-bold text-purple-400 mt-1">12</span>
+      </div>
+      <div class="bg-gemCard border border-gemBorder p-4 rounded-xl flex flex-col justify-between">
+        <span class="text-xs text-gray-400 font-medium">Total Earned</span>
+        <span id="totalEarned" class="text-xl font-bold text-emerald-400 mt-1">£4.50</span>
+      </div>
+      <div class="bg-gemCard border border-gemBorder p-4 rounded-xl flex flex-col justify-between">
+        <span class="text-xs text-gray-400 font-medium">Min. Payout</span>
+        <span class="text-xl font-bold text-gray-200 mt-1">500 Gems</span>
+      </div>
     </div>
 
-    <script>
-        // Initial Application State
-        let state = {
-            gems: 1250,
-            completedTasks: 8,
-            totalDailyGoal: 10,
-            tasks: [
-                { id: 1, title: 'Daily Check-in', reward: 50, icon: 'fa-calendar-check', color: 'text-emerald-400', desc: 'Claim your daily login bonus reward.', completed: false },
-                { id: 2, title: 'Watch Short Video Ad', reward: 100, icon: 'fa-circle-play', color: 'text-indigo-400', desc: 'Watch a 15-second sponsor clip.', completed: false },
-                { id: 3, title: 'Complete Quick Quiz', reward: 150, icon: 'fa-brain', color: 'text-amber-400', desc: 'Answer 3 basic trivia questions.', completed: false },
-                { id: 4, title: 'Invite a Friend', reward: 200, icon: 'fa-user-plus', color: 'text-purple-400', desc: 'Share your code with a classmate.', completed: false },
-                { id: 5, title: 'Follow Gem Forge on X', reward: 75, icon: 'fa-hashtag', color: 'text-sky-400', desc: 'Stay updated on new features.', completed: false }
-            ]
-        };
+    <!-- Active Offers Section -->
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-bolt text-amber-400"></i>
+          <span>Featured High-Yield Offers</span>
+        </h2>
+        <button onclick="openModal('taskModal')" class="text-xs text-purple-400 hover:text-purple-300">See All &rarr;</button>
+      </div>
 
-        // Web Audio API Sound Effects Synthesizer
-        function playRewardSound() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const ctx = new AudioCtx();
-                
-                // Play a two-tone chiming sound
-                const now = ctx.currentTime;
-                
-                const osc1 = ctx.createOscillator();
-                const gain1 = ctx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(523.25, now); // C5
-                osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
-                gain1.gain.setValueAtTime(0.3, now);
-                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                
-                osc1.connect(gain1);
-                gain1.connect(ctx.destination);
-                
-                osc1.start(now);
-                osc1.stop(now + 0.3);
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Task Card 1 -->
+        <div class="bg-gemCard border border-gemBorder hover:border-amber-500/40 p-5 rounded-xl transition space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="bg-amber-500/10 text-amber-400 text-xs font-semibold px-2 py-0.5 rounded border border-amber-500/20">Quick Quiz</span>
+              <span class="text-amber-400 font-bold text-sm flex items-center space-x-1">
+                <i class="fa-solid fa-gem text-xs"></i> <span>+250</span>
+              </span>
+            </div>
+            <h3 class="font-bold text-white mt-2">Gaming Trivia Challenge</h3>
+            <p class="text-xs text-gray-400 mt-1">Score 100% on a 10-question gaming trivia quiz.</p>
+          </div>
+          <button onclick="claimTask(250)" class="w-full bg-gemBg hover:bg-amber-500 hover:text-black text-amber-400 border border-amber-500/30 font-semibold py-2 rounded-lg text-sm transition">
+            Start Task
+          </button>
+        </div>
 
-                const osc2 = ctx.createOscillator();
-                const gain2 = ctx.createGain();
-                osc2.type = 'triangle';
-                osc2.frequency.setValueAtTime(783.99, now + 0.1); // G5
-                osc2.frequency.exponentialRampToValueAtTime(1046.50, now + 0.25); // C6
-                gain2.gain.setValueAtTime(0.2, now + 0.1);
-                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        <!-- Task Card 2 -->
+        <div class="bg-gemCard border border-gemBorder hover:border-purple-500/40 p-5 rounded-xl transition space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="bg-purple-500/10 text-purple-400 text-xs font-semibold px-2 py-0.5 rounded border border-purple-500/20">App Install</span>
+              <span class="text-amber-400 font-bold text-sm flex items-center space-x-1">
+                <i class="fa-solid fa-gem text-xs"></i> <span>+600</span>
+              </span>
+            </div>
+            <h3 class="font-bold text-white mt-2">Test Mobile Game</h3>
+            <p class="text-xs text-gray-400 mt-1">Download and reach Level 5 in the featured mobile app.</p>
+          </div>
+          <button onclick="claimTask(600)" class="w-full bg-gemBg hover:bg-purple-600 hover:text-white text-purple-400 border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
+            Start Task
+          </button>
+        </div>
 
-                osc2.connect(gain2);
-                gain2.connect(ctx.destination);
+        <!-- Task Card 3 -->
+        <div class="bg-gemCard border border-gemBorder hover:border-emerald-500/40 p-5 rounded-xl transition space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2 py-0.5 rounded border border-emerald-500/20">Survey</span>
+              <span class="text-amber-400 font-bold text-sm flex items-center space-x-1">
+                <i class="fa-solid fa-gem text-xs"></i> <span>+400</span>
+              </span>
+            </div>
+            <h3 class="font-bold text-white mt-2">Student Feedback Survey</h3>
+            <p class="text-xs text-gray-400 mt-1">5-minute survey about gaming & study preferences.</p>
+          </div>
+          <button onclick="claimTask(400)" class="w-full bg-gemBg hover:bg-emerald-600 hover:text-white text-emerald-400 border border-emerald-500/30 font-semibold py-2 rounded-lg text-sm transition">
+            Start Task
+          </button>
+        </div>
+      </div>
+    </div>
 
-                osc2.start(now + 0.1);
-                osc2.stop(now + 0.4);
-            } catch (e) {
-                console.log('Audio disabled or unsupported');
-            }
-        }
+  </main>
 
-        // Render Tasks in HTML
-        function renderTasks() {
-            const inlineList = document.getElementById('inlineTaskList');
-            const modalList = document.getElementById('modalTaskList');
+  <!-- MODAL: TASK LIST -->
+  <div id="taskModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-gemCard border border-gemBorder w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button onclick="closeModal('taskModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+        <i class="fa-solid fa-list-check text-purple-400"></i>
+        <span>Available Tasks</span>
+      </h3>
+      <div class="space-y-3 max-h-80 overflow-y-auto pr-1">
+        <div class="bg-gemBg p-3 rounded-xl flex justify-between items-center border border-gemBorder">
+          <div>
+            <h4 class="font-bold text-sm text-white">Daily Login Bonus</h4>
+            <p class="text-xs text-gray-400">Claim free daily gems</p>
+          </div>
+          <button onclick="claimTask(100)" class="bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs px-3 py-1.5 rounded-lg">
+            +100 Gems
+          </button>
+        </div>
+        <div class="bg-gemBg p-3 rounded-xl flex justify-between items-center border border-gemBorder">
+          <div>
+            <h4 class="font-bold text-sm text-white">Join Discord Server</h4>
+            <p class="text-xs text-gray-400">Verify account in community</p>
+          </div>
+          <button onclick="claimTask(150)" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg">
+            +150 Gems
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            inlineList.innerHTML = '';
-            modalList.innerHTML = '';
+  <!-- MODAL: WITHDRAW / CASHOUT -->
+  <div id="withdrawModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-gemCard border border-gemBorder w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl">
+      <button onclick="closeModal('withdrawModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-            state.tasks.forEach(task => {
-                const taskHTML = `
-                    <div class="flex items-center justify-between p-3.5 rounded-xl border transition-all ${task.completed ? 'bg-slate-900/40 border-slate-800/80 opacity-60' : 'bg-gem-card/80 hover:bg-slate-800/60 border-gem-cardBorder hover:border-purple-500/40'}">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center ${task.color}">
-                                <i class="fa-solid ${task.icon} text-base"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-white">${task.title}</h4>
-                                <p class="text-xs text-slate-400">${task.desc}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                                <i class="fa-solid fa-gem text-[10px]"></i> +${task.reward}
-                            </span>
-                            <button onclick="completeTask(${task.id})" 
-                                ${task.completed ? 'disabled' : ''} 
-                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95 ${task.completed ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 cursor-default' : 'bg-purple-600 hover:bg-purple-500 text-white shadow-md shadow-purple-900/30'}">
-                                ${task.completed ? '<i class="fa-solid fa-check"></i> Done' : 'Claim'}
-                            </button>
-                        </div>
-                    </div>
-                `;
+      <div class="space-y-1">
+        <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-wallet text-emerald-400"></i>
+          <span>Cashout Rewards</span>
+        </h3>
+        <p class="text-xs text-gray-400">Select a payout method to redeem your hard-earned gems.</p>
+      </div>
 
-                inlineList.innerHTML += taskHTML;
-                modalList.innerHTML += taskHTML;
-            });
-        }
+      <!-- Current Balance Notice -->
+      <div class="bg-gemBg p-3 rounded-xl border border-emerald-500/30 flex justify-between items-center">
+        <span class="text-xs text-gray-300">Your Balance:</span>
+        <span class="font-bold text-amber-400 text-sm flex items-center space-x-1">
+          <i class="fa-solid fa-gem text-xs"></i>
+          <span id="modalGemCount">1,250</span> Gems (~£<span id="modalCashVal">1.25</span>)
+        </span>
+      </div>
 
-        // Complete Task Handler
-        function completeTask(id) {
-            const task = state.tasks.find(t => t.id === id);
-            if (!task || task.completed) return;
+      <!-- Reward Options Grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Robux Card -->
+        <div onclick="selectReward('Robux', 500, '40 Robux')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
+          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+            <i class="fa-solid fa-cube"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">Robux</h4>
+            <p class="text-xs text-gray-400">Min 500 Gems</p>
+          </div>
+        </div>
 
-            task.completed = true;
-            state.gems += task.reward;
-            state.completedTasks += 1;
+        <!-- PayPal Cash -->
+        <div onclick="selectReward('PayPal Cash', 1000, '£1.00 PayPal')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-blue-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
+          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+            <i class="fa-brands fa-paypal"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">PayPal</h4>
+            <p class="text-xs text-gray-400">Min 1,000 Gems</p>
+          </div>
+        </div>
 
-            // Update UI elements
-            updateStatsUI();
-            renderTasks();
+        <!-- Gift Cards -->
+        <div onclick="selectReward('Gift Card', 2000, '£2.00 Card')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
+          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">Gift Card</h4>
+            <p class="text-xs text-gray-400">Min 2,000 Gems</p>
+          </div>
+        </div>
 
-            // Trigger Effects
-            playRewardSound();
-            triggerConfetti();
-            showToast('Task Completed!', `+${task.reward} Gems added to balance.`);
-        }
+        <!-- Crypto / LTC -->
+        <div onclick="selectReward('Litecoin', 1000, '£1.00 LTC')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-purple-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-white">Crypto</h4>
+            <p class="text-xs text-gray-400">Min 1,000 Gems</p>
+          </div>
+        </div>
+      </div>
 
-        // Update Header and Counter UI
-        function updateStatsUI() {
-            document.getElementById('gemBalance').innerText = state.gems.toLocaleString();
-            document.getElementById('cashValue').innerText = '£' + (state.gems / 100).toFixed(2);
-            document.getElementById('completedTasksCount').innerText = state.completedTasks;
+      <!-- Claim Form Input -->
+      <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-gemBorder">
+        <p id="selectedRewardText" class="text-xs font-semibold text-emerald-400"></p>
+        <input type="text" id="payoutDetail" placeholder="Enter Roblox Username, Email, or Wallet..." class="w-full bg-gemBg border border-gemBorder text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-emerald-500">
+        <button onclick="processPayout()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">
+          Submit Payout Request
+        </button>
+      </div>
+    </div>
+  </div>
 
-            const percentage = Math.min(Math.round((state.completedTasks / state.totalDailyGoal) * 100), 100);
-            document.getElementById('progressPercentText').innerText = percentage + '%';
-            document.getElementById('progressBar').style.width = percentage + '%';
-        }
+  <script>
+    let gems = 1250;
+    let selectedCost = 0;
+    let selectedName = '';
 
-        // Trigger Confetti FX
-        function triggerConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 50,
-                    spread: 60,
-                    origin: { y: 0.7 },
-                    colors: ['#8b5cf6', '#fbbf24', '#f59e0b']
-                });
-            }
-        }
+    function updateUI() {
+      document.getElementById('gemCount').innerText = gems.toLocaleString();
+      document.getElementById('modalGemCount').innerText = gems.toLocaleString();
+      const cash = (gems / 1000).toFixed(2);
+      document.getElementById('cashVal').innerText = cash;
+      document.getElementById('modalCashVal').innerText = cash;
+    }
 
-        // Toast Notification System
-        function showToast(title, msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastMessage').innerText = msg;
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
 
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
+    function claimTask(amount) {
+      gems += amount;
+      updateUI();
+      
+      confetti({
+        particleCount: 40,
+        spread: 60,
+        origin: { y: 0.7 }
+      });
 
-        // Copy Referral Code
-        function copyReferralCode() {
-            const code = "FORGE-99";
-            const dummy = document.createElement("textarea");
-            document.body.appendChild(dummy);
-            dummy.value = code;
-            dummy.select();
-            document.execCommand("copy");
-            document.body.removeChild(dummy);
+      alert(`🎉 Task Completed! You earned +${amount} Gems!`);
+      closeModal('taskModal');
+    }
 
-            showToast("Copied!", "Referral code copied to clipboard.");
-        }
+    function selectReward(name, cost, payout) {
+      selectedCost = cost;
+      selectedName = name;
+      
+      if (gems < cost) {
+        alert(`❌ You need at least ${cost} Gems for this payout option. Complete a few more tasks!`);
+        return;
+      }
 
-        // Modal Controls
-        function openTaskModal() {
-            const modal = document.getElementById('taskModal');
-            const container = document.getElementById('modalContainer');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            container.classList.remove('scale-95');
-            container.classList.add('scale-100');
-        }
+      const form = document.getElementById('payoutForm');
+      const text = document.getElementById('selectedRewardText');
+      text.innerText = `Selected: ${payout} (${cost} Gems)`;
+      form.classList.remove('hidden');
+    }
 
-        function closeTaskModal() {
-            const modal = document.getElementById('taskModal');
-            const container = document.getElementById('modalContainer');
-            container.classList.remove('scale-100');
-            container.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-        }
+    function processPayout() {
+      const input = document.getElementById('payoutDetail').value.trim();
+      if (!input) {
+        alert('Please enter your payout username or address.');
+        return;
+      }
 
-        // Initialize App on Page Load
-        window.onload = function() {
-            renderTasks();
-            updateStatsUI();
-        };
-    </script>
+      gems -= selectedCost;
+      updateUI();
+      
+      alert(`✅ Payout Request Submitted!\n\n${selectedName} request logged for: ${input}\nYour balance has been updated.`);
+      document.getElementById('payoutDetail').value = '';
+      document.getElementById('payoutForm').classList.add('hidden');
+      closeModal('withdrawModal');
+    }
+  </script>
 </body>
 </html>
