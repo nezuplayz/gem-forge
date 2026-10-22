@@ -59,8 +59,8 @@
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete App Tasks, Earn Gems</h1>
         <p class="text-gray-400 text-sm">Download featured apps or complete quick tasks to cash out Robux, PayPal, or Gift Cards.</p>
         <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
-          <i class="fa-solid fa-mobile-screen-button"></i>
-          <span>View Available Offers</span>
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Open Full CPAlead Offerwall</span>
         </button>
       </div>
     </div>
@@ -71,7 +71,7 @@
         <i class="fa-solid fa-calculator text-amber-400"></i>
         <h2 class="text-base font-bold text-white">Gem to Cash Converter</h2>
       </div>
-      <p class="text-xs text-gray-400">Rate: <strong>1,000 Gems = £1.00 GBP</strong>. Enter gems or pounds to see the value conversion.</p>
+      <p class="text-xs text-gray-400">Rate: <strong>1,000 Gems = £1.00 GBP</strong>. Enter gems or pounds to calculate values.</p>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
         <div class="space-y-1">
@@ -92,18 +92,18 @@
       </div>
     </div>
 
-    <!-- Active Offers Feed -->
+    <!-- Direct Featured App & Task Offers -->
     <div class="space-y-4">
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Featured App & Task Offers</span>
+          <span>Featured Tasks</span>
         </h2>
-        <span class="text-xs text-gray-400 font-medium">3 offers available</span>
+        <span class="text-xs text-gray-400 font-medium">All Devices & Mobile Friendly</span>
       </div>
 
       <div id="offerGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Rendered by JS -->
+        <!-- Direct offer cards load here -->
       </div>
     </div>
 
@@ -112,6 +112,60 @@
   <footer class="max-w-5xl mx-auto w-full px-4 mt-12 text-center text-xs text-gray-500 border-t border-[#2a364f] pt-4">
     -Nezu
   </footer>
+
+  <!-- MODAL: CPALEAD FULL OFFERWALL IFRAME -->
+  <div id="taskModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl h-[85vh] rounded-2xl relative flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-[#2a364f] flex justify-between items-center bg-[#0b0f19]">
+        <h3 class="text-base font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-layer-group text-purple-400"></i>
+          <span>CPAlead Live Offerwall</span>
+        </h3>
+        <button id="closeTask" class="text-gray-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="flex-grow w-full bg-white relative">
+        <iframe id="offerwallIframe" src="https://www.fastsvr.com/unlock/pQ251ivJ" class="w-full h-full border-none"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TASK DETAIL -->
+  <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+        <div>
+          <h3 id="detailTitle" class="text-lg font-bold text-white">App Install Task</h3>
+          <p id="detailCategory" class="text-xs text-amber-400 font-semibold"></p>
+        </div>
+      </div>
+
+      <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
+        <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions to earn:</p>
+        <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed"></p>
+      </div>
+
+      <div class="space-y-2">
+        <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-2.5 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
+          <span>1. Open Offer</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+
+        <button id="claimTaskBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
+          2. Claim Gems
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: AUTHENTICATION -->
   <div id="authModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -149,55 +203,6 @@
       <div class="text-center pt-2 border-t border-[#2a364f]">
         <button type="button" id="toggleAuthBtn" class="text-xs text-purple-400 hover:text-purple-300">
           Don't have an account? Sign Up
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ALL TASKS LIST -->
-  <div id="taskModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button id="closeTask" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <h3 class="text-xl font-bold text-white flex items-center space-x-2">
-        <i class="fa-solid fa-list-check text-purple-400"></i>
-        <span>All Live Offers</span>
-      </h3>
-      <div id="modalOfferList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
-    </div>
-  </div>
-
-  <!-- MODAL: TASK DETAIL -->
-  <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30">
-          <i class="fa-solid fa-download"></i>
-        </div>
-        <div>
-          <h3 id="detailTitle" class="text-lg font-bold text-white">App Install Task</h3>
-          <p id="detailCategory" class="text-xs text-amber-400 font-semibold"></p>
-        </div>
-      </div>
-
-      <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
-        <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions to earn:</p>
-        <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed"></p>
-      </div>
-
-      <div class="space-y-2">
-        <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-2.5 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
-          <span>1. Open Offer / Install App</span>
-          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-        </a>
-
-        <button id="claimTaskBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
-          2. Verify & Claim Gems
         </button>
       </div>
     </div>
@@ -263,39 +268,34 @@
       let gems = 1250;
       let isSignUp = false;
       let selectedCost = 0;
-      let selectedName = '';
       let currentTask = null;
-      let supabase = null;
 
-      try {
-        if (window.supabase) {
-          supabase = window.supabase.createClient(
-            "https://uauozeqbgubekniqkszn.supabase.co",
-            "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS"
-          );
+      // Real CPAlead Link Locker
+      const directOffers = [
+        { 
+          id: 1, 
+          title: "Featured App Install", 
+          reward: 750, 
+          typeTag: "Top Rated", 
+          desc: "Complete any featured mobile offer to receive gems.", 
+          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
+        },
+        { 
+          id: 2, 
+          title: "Quick Rewards Task", 
+          reward: 500, 
+          typeTag: "Easy", 
+          desc: "Complete an available task or survey to earn gems.", 
+          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
+        },
+        { 
+          id: 3, 
+          title: "Bonus Game Download", 
+          reward: 600, 
+          typeTag: "Popular", 
+          desc: "Install and launch the game on your mobile device.", 
+          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
         }
-      } catch (e) {
-        console.warn("Supabase client error:", e);
-      }
-
-      // Converter Logic
-      const calcGems = document.getElementById('calcGems');
-      const calcCash = document.getElementById('calcCash');
-      if (calcGems && calcCash) {
-        calcGems.addEventListener('input', function() {
-          const val = parseFloat(calcGems.value) || 0;
-          calcCash.value = (val / 1000).toFixed(2);
-        });
-        calcCash.addEventListener('input', function() {
-          const val = parseFloat(calcCash.value) || 0;
-          calcGems.value = Math.round(val * 1000);
-        });
-      }
-
-      const offers = [
-        { id: 1, title: "Test Featured Mobile App", reward: 600, typeTag: "App Install", desc: "Install app and complete tutorial.", url: "https://www.cpalead.com" },
-        { id: 2, title: "Gaming Trivia Quiz", reward: 250, typeTag: "Quiz", desc: "Complete 10 trivia questions.", url: "https://www.cpalead.com" },
-        { id: 3, title: "Student Feedback Survey", reward: 400, typeTag: "Survey", desc: "Complete 3-min preference survey.", url: "https://www.cpalead.com" }
       ];
 
       function updateGems(val) {
@@ -320,55 +320,10 @@
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
 
-      document.getElementById('toggleAuthBtn').addEventListener('click', function() {
-        isSignUp = !isSignUp;
-        document.getElementById('authTitle').innerText = isSignUp ? "Create Account" : "Sign In";
-        document.getElementById('authSubmitBtn').innerText = isSignUp ? "Create Account" : "Sign In";
-        document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
-      });
-
-      document.getElementById('authForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('authEmail').value.trim();
-        const pass = document.getElementById('authPassword').value;
-
-        if (!supabase) {
-          alert("Offline mode: Account simulated!");
-          document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
-          hideModal('authModal');
-          return;
-        }
-
-        try {
-          if (isSignUp) {
-            const { data, error } = await supabase.auth.signUp({ email, password: pass });
-            if (error) throw error;
-            alert("✅ Account created successfully! Logging you in...");
-            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
-          } else {
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-            if (error) throw error;
-            alert("🎉 Logged in successfully!");
-            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
-          }
-          hideModal('authModal');
-        } catch(err) {
-          console.error("Auth Catch:", err);
-          // Graceful fallback on network block
-          if (err.message && err.message.includes('fetch')) {
-            alert("⚠️ Network connectivity issue reaching auth servers. Logged in via fallback mode!");
-            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
-            hideModal('authModal');
-          } else {
-            alert("Auth Error: " + err.message);
-          }
-        }
-      });
-
-      // Offers
+      // Render Direct Offers
       const grid = document.getElementById('offerGrid');
       grid.innerHTML = '';
-      offers.forEach(o => {
+      directOffers.forEach(o => {
         const card = document.createElement('div');
         card.className = "bg-[#151c2e] border border-[#2a364f] p-5 rounded-xl space-y-3 flex flex-col justify-between";
         card.innerHTML = `
@@ -381,7 +336,7 @@
             <p class="text-xs text-gray-400 mt-1">${o.desc}</p>
           </div>
           <button class="btnViewTask w-full bg-[#0b0f19] hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
-            View Task Steps
+            View App Steps
           </button>
         `;
         card.querySelector('.btnViewTask').addEventListener('click', () => {
@@ -405,14 +360,12 @@
 
       document.getElementById('payoutRobux').addEventListener('click', () => {
         selectedCost = 500;
-        selectedName = 'Robux';
         document.getElementById('selectedRewardText').innerText = 'Selected: 40 Robux (500 Gems)';
         document.getElementById('payoutForm').classList.remove('hidden');
       });
 
       document.getElementById('payoutPaypal').addEventListener('click', () => {
         selectedCost = 1000;
-        selectedName = 'PayPal';
         document.getElementById('selectedRewardText').innerText = 'Selected: £1.00 PayPal (1,000 Gems)';
         document.getElementById('payoutForm').classList.remove('hidden');
       });
