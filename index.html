@@ -4,30 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gem Forge - Micro-Earning Dashboard</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gemBg: '#0b0f19',
-            gemCard: '#151c2e',
-            gemBorder: '#2a364f',
-            gemGold: '#fbbf24',
-            gemPurple: '#8b5cf6',
-            gemGreen: '#10b981',
-          }
-        }
-      }
-    }
-  </script>
   <style>
     body { background-color: #0b0f19; color: #f3f4f6; font-family: sans-serif; }
     .glow-gold { box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); }
@@ -36,7 +16,7 @@
 <body class="min-h-screen flex flex-col justify-between pb-10">
 
   <!-- Header / Navigation -->
-  <header class="bg-gemCard border-b border-gemBorder p-4 sticky top-0 z-30 shadow-lg">
+  <header class="bg-[#151c2e] border-b border-[#2a364f] p-4 sticky top-0 z-30 shadow-lg">
     <div class="max-w-5xl mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-amber-400 flex items-center justify-center shadow-md">
@@ -47,20 +27,20 @@
         </span>
       </div>
 
-      <!-- Balance, Account & Withdraw -->
+      <!-- Balance & Actions -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <div class="bg-gemBg border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
+        <div class="bg-[#0b0f19] border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
           <i class="fa-solid fa-gem text-amber-400"></i>
           <span id="gemCount" class="font-bold text-amber-300">1,250</span>
           <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">1.25</span>)</span>
         </div>
         
-        <button onclick="openModal('withdrawModal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition flex items-center space-x-1.5 text-sm">
+        <button id="btnWithdraw" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-md hover:brightness-110 transition flex items-center space-x-1.5 text-sm">
           <i class="fa-solid fa-wallet"></i>
           <span class="hidden sm:inline">Withdraw</span>
         </button>
 
-        <button id="authNavBtn" onclick="openModal('authModal')" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm">
+        <button id="btnAuth" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm">
           Login / Sign Up
         </button>
       </div>
@@ -71,14 +51,14 @@
   <main class="max-w-5xl mx-auto w-full px-4 mt-6 flex-grow space-y-6">
 
     <!-- Hero Banner -->
-    <div class="bg-gradient-to-r from-purple-900/40 via-gemCard to-gemCard border border-gemPurple/30 rounded-2xl p-6 relative overflow-hidden shadow-xl">
+    <div class="bg-gradient-to-r from-purple-900/40 via-[#151c2e] to-[#151c2e] border border-purple-500/30 rounded-2xl p-6 relative overflow-hidden shadow-xl">
       <div class="relative z-10 max-w-lg space-y-2">
         <span id="userWelcomeBadge" class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-purple-500/30">
           👋 Welcome Guest
         </span>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete App Tasks, Earn Gems</h1>
         <p class="text-gray-400 text-sm">Download featured apps or complete quick tasks to cash out Robux, PayPal, or Gift Cards.</p>
-        <button onclick="openModal('taskModal')" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
+        <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
           <i class="fa-solid fa-mobile-screen-button"></i>
           <span>View Available Offers</span>
         </button>
@@ -92,25 +72,24 @@
           <i class="fa-solid fa-bolt text-amber-400"></i>
           <span>Featured App & Task Offers</span>
         </h2>
-        <span id="activeOfferCount" class="text-xs text-gray-400 font-medium">3 offers available</span>
+        <span class="text-xs text-gray-400 font-medium">3 offers available</span>
       </div>
 
       <div id="offerGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Offers render dynamically -->
+        <!-- Rendered by JS -->
       </div>
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="max-w-5xl mx-auto w-full px-4 mt-12 text-center text-xs text-gray-500 border-t border-gemBorder pt-4">
+  <footer class="max-w-5xl mx-auto w-full px-4 mt-12 text-center text-xs text-gray-500 border-t border-[#2a364f] pt-4">
     -Nezu
   </footer>
 
   <!-- MODAL: AUTHENTICATION -->
   <div id="authModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-gemCard border border-gemBorder w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeModal('authModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button id="closeAuth" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -119,20 +98,20 @@
         <p id="authSubtitle" class="text-xs text-gray-400">Save your earned gems permanently to your account.</p>
       </div>
 
-      <form id="authForm" onsubmit="handleAuth(event)" class="space-y-3">
+      <form id="authForm" class="space-y-3">
         <div id="usernameContainer" class="hidden space-y-1">
           <label class="text-xs text-gray-400">Username</label>
-          <input type="text" id="authUsername" placeholder="Enter username" class="w-full bg-gemBg border border-gemBorder text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-purple-500">
+          <input type="text" id="authUsername" placeholder="Enter username" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
 
         <div class="space-y-1">
           <label class="text-xs text-gray-400">Email Address</label>
-          <input type="email" id="authEmail" required placeholder="name@example.com" class="w-full bg-gemBg border border-gemBorder text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-purple-500">
+          <input type="email" id="authEmail" required placeholder="name@example.com" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
 
         <div class="space-y-1">
           <label class="text-xs text-gray-400">Password</label>
-          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-gemBg border border-gemBorder text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-purple-500">
+          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
 
         <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2.5 rounded-lg shadow-md hover:brightness-110 transition text-sm mt-2">
@@ -140,8 +119,8 @@
         </button>
       </form>
 
-      <div class="text-center pt-2 border-t border-gemBorder">
-        <button type="button" onclick="toggleAuthMode()" id="toggleAuthBtn" class="text-xs text-purple-400 hover:text-purple-300">
+      <div class="text-center pt-2 border-t border-[#2a364f]">
+        <button type="button" id="toggleAuthBtn" class="text-xs text-purple-400 hover:text-purple-300">
           Don't have an account? Sign Up
         </button>
       </div>
@@ -150,8 +129,8 @@
 
   <!-- MODAL: ALL TASKS LIST -->
   <div id="taskModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-gemCard border border-gemBorder w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeModal('taskModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button id="closeTask" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
       <h3 class="text-xl font-bold text-white flex items-center space-x-2">
@@ -162,10 +141,10 @@
     </div>
   </div>
 
-  <!-- MODAL: TASK DETAIL & INSTRUCTIONS -->
+  <!-- MODAL: TASK DETAIL -->
   <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-gemCard border border-gemBorder w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeModal('detailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -179,7 +158,7 @@
         </div>
       </div>
 
-      <div class="bg-gemBg p-3.5 rounded-xl border border-gemBorder space-y-2">
+      <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
         <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions to earn:</p>
         <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed"></p>
       </div>
@@ -190,17 +169,17 @@
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
 
-        <button id="claimTaskBtn" onclick="confirmTaskCompletion()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
+        <button id="claimTaskBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
           2. Verify & Claim Gems
         </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: WITHDRAW / CASHOUT -->
+  <!-- MODAL: WITHDRAW -->
   <div id="withdrawModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-gemCard border border-gemBorder w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl">
-      <button onclick="closeModal('withdrawModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl">
+      <button id="closeWithdraw" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -212,7 +191,7 @@
         <p class="text-xs text-gray-400">Select a payout method to redeem your gems.</p>
       </div>
 
-      <div class="bg-gemBg p-3 rounded-xl border border-emerald-500/30 flex justify-between items-center">
+      <div class="bg-[#0b0f19] p-3 rounded-xl border border-emerald-500/30 flex justify-between items-center">
         <span class="text-xs text-gray-300">Your Balance:</span>
         <span class="font-bold text-amber-400 text-sm flex items-center space-x-1">
           <i class="fa-solid fa-gem text-xs"></i>
@@ -221,8 +200,8 @@
       </div>
 
       <div class="grid grid-cols-2 gap-3">
-        <div onclick="selectReward('Robux', 500, '40 Robux')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
-          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+        <div id="payoutRobux" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
+          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-solid fa-cube"></i>
           </div>
           <div>
@@ -231,8 +210,8 @@
           </div>
         </div>
 
-        <div onclick="selectReward('PayPal Cash', 1000, '£1.00 PayPal')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-blue-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
-          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
+        <div id="payoutPaypal" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-blue-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
+          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-brands fa-paypal"></i>
           </div>
           <div>
@@ -240,32 +219,12 @@
             <p class="text-xs text-gray-400">Min 1,000 Gems</p>
           </div>
         </div>
-
-        <div onclick="selectReward('Gift Card', 2000, '£2.00 Card')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
-          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-gift"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Gift Card</h4>
-            <p class="text-xs text-gray-400">Min 2,000 Gems</p>
-          </div>
-        </div>
-
-        <div onclick="selectReward('Litecoin', 1000, '£1.00 LTC')" class="cursor-pointer bg-gemBg border border-gemBorder hover:border-purple-500/50 p-3 rounded-xl flex items-center space-x-3 transition group">
-          <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-coins"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Crypto</h4>
-            <p class="text-xs text-gray-400">Min 1,000 Gems</p>
-          </div>
-        </div>
       </div>
 
-      <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-gemBorder">
+      <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-[#2a364f]">
         <p id="selectedRewardText" class="text-xs font-semibold text-emerald-400"></p>
-        <input type="text" id="payoutDetail" placeholder="Enter Roblox Username, Email, or Wallet..." class="w-full bg-gemBg border border-gemBorder text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-emerald-500">
-        <button onclick="processPayout()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">
+        <input type="text" id="payoutDetail" placeholder="Enter Roblox Username or PayPal Email..." class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
+        <button id="btnSubmitPayout" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">
           Submit Payout Request
         </button>
       </div>
@@ -273,309 +232,145 @@
   </div>
 
   <script>
-    // Global State
-    let gems = 1250;
-    let isSignUpMode = false;
-    let selectedCost = 0;
-    let selectedName = '';
-    let currentTask = null;
-    let supabase = null;
-    let currentUser = null;
-    let userProfile = null;
+    document.addEventListener("DOMContentLoaded", function() {
+      let gems = 1250;
+      let isSignUp = false;
+      let selectedCost = 0;
+      let selectedName = '';
+      let currentTask = null;
+      let supabase = null;
 
-    // Initialize Supabase
-    try {
-      if (window.supabase) {
-        supabase = window.supabase.createClient(
-          "https://uauozeqbgubekniqkszn.supabase.co",
-          "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS"
-        );
-      }
-    } catch (e) {
-      console.log("Supabase init note:", e);
-    }
-
-    const activeOffers = [
-      {
-        id: 1,
-        title: "Test Featured Mobile App",
-        category: "Mobile App Install",
-        reward: 600,
-        typeTag: "App Install",
-        desc: "Tap 'Open Offer' below to install the game on your device. Complete the quick tutorial or level 5, then return here to claim your gems.",
-        url: "https://www.cpalead.com"
-      },
-      {
-        id: 2,
-        title: "Gaming Trivia Quiz",
-        category: "Quick Quiz",
-        reward: 250,
-        typeTag: "Quiz",
-        desc: "Complete the 10-question gaming trivia quiz with a passing score.",
-        url: "https://www.cpalead.com"
-      },
-      {
-        id: 3,
-        title: "Student Feedback Survey",
-        category: "Opinion Survey",
-        reward: 400,
-        typeTag: "Survey",
-        desc: "Complete a short 3-minute student preference survey.",
-        url: "https://www.cpalead.com"
-      }
-    ];
-
-    async function initApp() {
-      renderOffers();
-      updateUI();
-
-      if (supabase) {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            currentUser = session.user;
-            await loadUserProfile();
-          }
-        } catch (e) {
-          console.warn("Auth session check error:", e);
-        }
-      }
-    }
-
-    async function loadUserProfile() {
-      if (!currentUser || !supabase) return;
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
-
-        if (data) {
-          userProfile = data;
-          gems = data.gems !== undefined ? data.gems : 1250;
-        } else {
-          gems = 1250;
-          await supabase.from('profiles').upsert({
-            id: currentUser.id,
-            email: currentUser.email,
-            username: currentUser.email.split('@')[0],
-            gems: gems
-          });
+        if (window.supabase) {
+          supabase = window.supabase.createClient(
+            "https://uauozeqbgubekniqkszn.supabase.co",
+            "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS"
+          );
         }
       } catch (e) {
-        console.warn("Profile load error:", e);
+        console.warn("Supabase init:", e);
       }
-      updateUI();
-    }
 
-    async function saveGemsToDB(newAmount) {
-      gems = newAmount;
-      updateUI();
-      if (currentUser && supabase) {
+      const offers = [
+        { id: 1, title: "Test Featured Mobile App", reward: 600, typeTag: "App Install", desc: "Install app and complete tutorial.", url: "https://www.cpalead.com" },
+        { id: 2, title: "Gaming Trivia Quiz", reward: 250, typeTag: "Quiz", desc: "Complete 10 trivia questions.", url: "https://www.cpalead.com" },
+        { id: 3, title: "Student Feedback Survey", reward: 400, typeTag: "Survey", desc: "Complete 3-min preference survey.", url: "https://www.cpalead.com" }
+      ];
+
+      function updateGems(val) {
+        gems = val;
+        document.getElementById('gemCount').innerText = gems.toLocaleString();
+        document.getElementById('modalGemCount').innerText = gems.toLocaleString();
+        const cash = (gems / 1000).toFixed(2);
+        document.getElementById('cashVal').innerText = cash;
+        document.getElementById('modalCashVal').innerText = cash;
+      }
+
+      function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
+      function hideModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+      // Event Listeners
+      document.getElementById('btnWithdraw').addEventListener('click', () => showModal('withdrawModal'));
+      document.getElementById('btnAuth').addEventListener('click', () => showModal('authModal'));
+      document.getElementById('btnOffers').addEventListener('click', () => showModal('taskModal'));
+
+      document.getElementById('closeAuth').addEventListener('click', () => hideModal('authModal'));
+      document.getElementById('closeTask').addEventListener('click', () => hideModal('taskModal'));
+      document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
+      document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
+
+      document.getElementById('toggleAuthBtn').addEventListener('click', function() {
+        isSignUp = !isSignUp;
+        document.getElementById('authTitle').innerText = isSignUp ? "Create Account" : "Sign In";
+        document.getElementById('authSubmitBtn').innerText = isSignUp ? "Create Account" : "Sign In";
+        document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
+      });
+
+      document.getElementById('authForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value;
+        const pass = document.getElementById('authPassword').value;
+        if (!supabase) return;
+
         try {
-          await supabase
-            .from('profiles')
-            .update({ gems: gems })
-            .eq('id', currentUser.id);
-        } catch (e) {
-          console.warn("Save gems error:", e);
+          if (isSignUp) {
+            const { error } = await supabase.auth.signUp({ email, password: pass });
+            if (error) throw error;
+            alert("Account created!");
+          } else {
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+            if (error) throw error;
+            alert("Signed in!");
+          }
+          hideModal('authModal');
+        } catch(err) {
+          alert(err.message);
         }
-      }
-    }
+      });
 
-    function renderOffers() {
+      // Render Offers
       const grid = document.getElementById('offerGrid');
-      const modalList = document.getElementById('modalOfferList');
-      if (!grid || !modalList) return;
-
       grid.innerHTML = '';
-      modalList.innerHTML = '';
-
-      activeOffers.forEach(offer => {
+      offers.forEach(o => {
         const card = document.createElement('div');
-        card.className = "bg-gemCard border border-gemBorder hover:border-purple-500/40 p-5 rounded-xl transition space-y-3 flex flex-col justify-between";
+        card.className = "bg-[#151c2e] border border-[#2a364f] p-5 rounded-xl space-y-3 flex flex-col justify-between";
         card.innerHTML = `
           <div>
             <div class="flex justify-between items-start">
-              <span class="bg-purple-500/10 text-purple-400 text-xs font-semibold px-2 py-0.5 rounded border border-purple-500/20">${offer.typeTag}</span>
-              <span class="text-amber-400 font-bold text-sm flex items-center space-x-1">
-                <i class="fa-solid fa-gem text-xs"></i> <span>+${offer.reward}</span>
-              </span>
+              <span class="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded border border-purple-500/20">${o.typeTag}</span>
+              <span class="text-amber-400 font-bold text-sm">+${o.reward} Gems</span>
             </div>
-            <h3 class="font-bold text-white mt-2">${offer.title}</h3>
-            <p class="text-xs text-gray-400 mt-1 line-clamp-2">${offer.desc}</p>
+            <h3 class="font-bold text-white mt-2">${o.title}</h3>
+            <p class="text-xs text-gray-400 mt-1">${o.desc}</p>
           </div>
-          <button onclick="openDetailModal(${offer.id})" class="w-full bg-gemBg hover:bg-purple-600 hover:text-white text-purple-400 border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
+          <button class="btnViewTask w-full bg-[#0b0f19] hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
             View Task Steps
           </button>
         `;
+        card.querySelector('.btnViewTask').addEventListener('click', () => {
+          currentTask = o;
+          document.getElementById('detailTitle').innerText = o.title;
+          document.getElementById('detailCategory').innerText = `${o.typeTag} • +${o.reward} Gems`;
+          document.getElementById('detailDesc').innerText = o.desc;
+          document.getElementById('startTaskBtn').href = o.url;
+          showModal('detailModal');
+        });
         grid.appendChild(card);
-
-        const modalRow = document.createElement('div');
-        modalRow.className = "bg-gemBg p-3 rounded-xl flex justify-between items-center border border-gemBorder";
-        modalRow.innerHTML = `
-          <div>
-            <h4 class="font-bold text-sm text-white">${offer.title}</h4>
-            <p class="text-xs text-gray-400">${offer.typeTag} • +${offer.reward} Gems</p>
-          </div>
-          <button onclick="closeModal('taskModal'); openDetailModal(${offer.id})" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg">
-            Start
-          </button>
-        `;
-        modalList.appendChild(modalRow);
-      });
-    }
-
-    function updateUI() {
-      document.getElementById('gemCount').innerText = gems.toLocaleString();
-      document.getElementById('modalGemCount').innerText = gems.toLocaleString();
-      const cash = (gems / 1000).toFixed(2);
-      document.getElementById('cashVal').innerText = cash;
-      document.getElementById('modalCashVal').innerText = cash;
-
-      const navBtn = document.getElementById('authNavBtn');
-      const badge = document.getElementById('userWelcomeBadge');
-
-      if (currentUser) {
-        const displayName = userProfile?.username || currentUser.email.split('@')[0];
-        navBtn.innerText = "Log Out";
-        navBtn.onclick = handleLogout;
-        navBtn.className = "bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg transition text-sm";
-        badge.innerText = `🔥 Welcome, ${displayName}`;
-      } else {
-        navBtn.innerText = "Login / Sign Up";
-        navBtn.onclick = () => openModal('authModal');
-        navBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
-        badge.innerText = "👋 Welcome Guest";
-      }
-    }
-
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    }
-
-    function openDetailModal(offerId) {
-      currentTask = activeOffers.find(o => o.id === offerId);
-      if (!currentTask) return;
-
-      document.getElementById('detailTitle').innerText = currentTask.title;
-      document.getElementById('detailCategory').innerText = `${currentTask.typeTag} • Reward: +${currentTask.reward} Gems`;
-      document.getElementById('detailDesc').innerText = currentTask.desc;
-      document.getElementById('startTaskBtn').href = currentTask.url;
-
-      openModal('detailModal');
-    }
-
-    async function confirmTaskCompletion() {
-      if (!currentTask) return;
-      const newGems = gems + currentTask.reward;
-      await saveGemsToDB(newGems);
-
-      confetti({
-        particleCount: 50,
-        spread: 70,
-        origin: { y: 0.6 }
       });
 
-      alert(`🎉 Task completed! You earned +${currentTask.reward} Gems!`);
-      closeModal('detailModal');
-    }
+      document.getElementById('claimTaskBtn').addEventListener('click', () => {
+        if (!currentTask) return;
+        updateGems(gems + currentTask.reward);
+        confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+        alert(`Earned +${currentTask.reward} Gems!`);
+        hideModal('detailModal');
+      });
 
-    function selectReward(name, cost, payout) {
-      selectedCost = cost;
-      selectedName = name;
-      
-      if (gems < cost) {
-        alert(`❌ You need at least ${cost} Gems for this payout option. Complete a few more tasks!`);
-        return;
-      }
+      document.getElementById('payoutRobux').addEventListener('click', () => {
+        selectedCost = 500;
+        selectedName = 'Robux';
+        document.getElementById('selectedRewardText').innerText = 'Selected: 40 Robux (500 Gems)';
+        document.getElementById('payoutForm').classList.remove('hidden');
+      });
 
-      const form = document.getElementById('payoutForm');
-      const text = document.getElementById('selectedRewardText');
-      text.innerText = `Selected: ${payout} (${cost} Gems)`;
-      form.classList.remove('hidden');
-    }
+      document.getElementById('payoutPaypal').addEventListener('click', () => {
+        selectedCost = 1000;
+        selectedName = 'PayPal';
+        document.getElementById('selectedRewardText').innerText = 'Selected: £1.00 PayPal (1,000 Gems)';
+        document.getElementById('payoutForm').classList.remove('hidden');
+      });
 
-    async function processPayout() {
-      const input = document.getElementById('payoutDetail').value.trim();
-      if (!input) {
-        alert('Please enter your payout username or address.');
-        return;
-      }
+      document.getElementById('btnSubmitPayout').addEventListener('click', () => {
+        const input = document.getElementById('payoutDetail').value.trim();
+        if (!input) return alert('Enter account info.');
+        if (gems < selectedCost) return alert('Not enough gems.');
+        updateGems(gems - selectedCost);
+        alert(`Payout submitted for: ${input}`);
+        hideModal('withdrawModal');
+      });
 
-      const newGems = gems - selectedCost;
-      await saveGemsToDB(newGems);
-      
-      alert(`✅ Payout Request Submitted!\n\n${selectedName} request logged for: ${input}\nYour balance has been updated.`);
-      document.getElementById('payoutDetail').value = '';
-      document.getElementById('payoutForm').classList.add('hidden');
-      closeModal('withdrawModal');
-    }
-
-    function toggleAuthMode() {
-      isSignUpMode = !isSignUpMode;
-      document.getElementById('authTitle').innerText = isSignUpMode ? "Create Gem Forge Account" : "Sign In to Gem Forge";
-      document.getElementById('authSubtitle').innerText = isSignUpMode ? "Earn gems and cash out real rewards." : "Save your earned gems permanently to your account.";
-      document.getElementById('authSubmitBtn').innerText = isSignUpMode ? "Create Account" : "Sign In";
-      document.getElementById('toggleAuthBtn').innerText = isSignUpMode ? "Already have an account? Sign In" : "Don't have an account? Sign Up";
-      document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUpMode);
-    }
-
-    async function handleAuth(e) {
-      e.preventDefault();
-      if (!supabase) {
-        alert("Database connection offline.");
-        return;
-      }
-
-      const email = document.getElementById('authEmail').value;
-      const password = document.getElementById('authPassword').value;
-      const username = document.getElementById('authUsername').value;
-
-      try {
-        if (isSignUpMode) {
-          const { data, error } = await supabase.auth.signUp({
-            email, password,
-            options: { data: { username: username || email.split('@')[0] } }
-          });
-          if (error) throw error;
-          alert("✅ Account created! You can now log in.");
-          toggleAuthMode();
-        } else {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-          currentUser = data.user;
-          await loadUserProfile();
-          alert("🎉 Welcome back!");
-          closeModal('authModal');
-        }
-      } catch (err) {
-        alert("Authentication Error: " + err.message);
-      }
-    }
-
-    async function handleLogout() {
-      if (supabase) {
-        await supabase.auth.signOut();
-      }
-      currentUser = null;
-      userProfile = null;
-      gems = 1250;
-      updateUI();
-      alert("Logged out successfully.");
-    }
-
-    // Run when page loads
-    window.onload = function() {
-      initApp();
-    };
+      updateGems(1250);
+    });
   </script>
 </body>
 </html>
