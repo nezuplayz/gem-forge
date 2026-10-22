@@ -132,7 +132,7 @@
     </div>
   </div>
 
-  <!-- MODAL: TASK DETAIL (VERIFIED LOGIC) -->
+  <!-- MODAL: TASK DETAIL -->
   <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
       <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
@@ -155,7 +155,7 @@
       </div>
 
       <div class="space-y-3 pt-1">
-        <a id="startTaskBtn" href="#" target="_blank" onclick="markTaskInProgress()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
+        <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
           <span>Launch Offer in CPAlead</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
@@ -165,7 +165,7 @@
             <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
             <span>Automatic Crediting Active</span>
           </p>
-          <p class="text-[11px] text-gray-400">Complete the offer instructions in the opened tab. Gems will credit automatically upon advertiser verification.</p>
+          <p class="text-[11px] text-gray-400">Complete the offer instructions in the opened tab. Gems credit automatically upon advertiser verification.</p>
         </div>
       </div>
     </div>
@@ -298,16 +298,16 @@
   </div>
 
   <script>
-    let gems = 0;
-    let isSignUp = false;
-    let isLoggedIn = false;
-    let selectedCost = 0;
-    let selectedRewardName = '';
-    let currentTask = null;
-    let supabase = null;
-    let currentUser = null;
+    document.addEventListener("DOMContentLoaded", function() {
+      let gems = 0;
+      let isSignUp = false;
+      let isLoggedIn = false;
+      let selectedCost = 0;
+      let selectedRewardName = '';
+      let currentTask = null;
+      let supabase = null;
+      let currentUser = null;
 
-    document.addEventListener("DOMContentLoaded", async function() {
       try {
         if (window.supabase) {
           supabase = window.supabase.createClient(
@@ -377,6 +377,20 @@
       function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
       function hideModal(id) { document.getElementById(id).classList.add('hidden'); }
 
+      // Converter Logic
+      const calcGems = document.getElementById('calcGems');
+      const calcCash = document.getElementById('calcCash');
+      if (calcGems && calcCash) {
+        calcGems.addEventListener('input', function() {
+          const val = parseFloat(calcGems.value) || 0;
+          calcCash.value = (val / 1000).toFixed(2);
+        });
+        calcCash.addEventListener('input', function() {
+          const val = parseFloat(calcCash.value) || 0;
+          calcGems.value = Math.round(val * 1000);
+        });
+      }
+
       // Header Button Action
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
@@ -391,7 +405,6 @@
 
       document.getElementById('btnWithdraw').addEventListener('click', () => showModal('withdrawModal'));
       
-      // Open Offerwall with Dynamic User Tag
       document.getElementById('btnOffers').addEventListener('click', () => {
         document.getElementById('offerwallIframe').src = getDynamicLockerUrl();
         showModal('taskModal');
@@ -489,6 +502,12 @@
         grid.appendChild(card);
       });
 
+      document.getElementById('startTaskBtn').addEventListener('click', function() {
+        setTimeout(() => {
+          alert("ℹ️ Offer opened in a new tab! Gems will credit automatically upon advertiser verification.");
+        }, 300);
+      });
+
       // Cashout Selectors
       function setupRewardSelection(elementId, cost, rewardText) {
         document.getElementById(elementId).addEventListener('click', () => {
@@ -518,12 +537,6 @@
 
       updateGems(0);
     });
-
-    function markTaskInProgress() {
-      setTimeout(() => {
-        alert("ℹ️ Task tab launched! Complete the offer in the opened window. Your gems will credit automatically upon advertiser verification.");
-      }, 500);
-    }
   </script>
 </body>
 </html>
