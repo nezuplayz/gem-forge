@@ -51,8 +51,8 @@
       <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="bg-gemBg border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
           <i class="fa-solid fa-gem text-amber-400"></i>
-          <span id="gemCount" class="font-bold text-amber-300">0</span>
-          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">0.00</span>)</span>
+          <span id="gemCount" class="font-bold text-amber-300">1,250</span>
+          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">1.25</span>)</span>
         </div>
         
         <button onclick="openModal('withdrawModal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition flex items-center space-x-1.5 text-sm">
@@ -92,7 +92,7 @@
           <i class="fa-solid fa-bolt text-amber-400"></i>
           <span>Featured App & Task Offers</span>
         </h2>
-        <span id="activeOfferCount" class="text-xs text-gray-400 font-medium">Loading offers...</span>
+        <span id="activeOfferCount" class="text-xs text-gray-400 font-medium">3 offers available</span>
       </div>
 
       <div id="offerGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -102,7 +102,12 @@
 
   </main>
 
-  <!-- MODAL: AUTHENTICATION (SIGN UP / LOGIN) -->
+  <!-- Footer -->
+  <footer class="max-w-5xl mx-auto w-full px-4 mt-12 text-center text-xs text-gray-500 border-t border-gemBorder pt-4">
+    -Nezu
+  </footer>
+
+  <!-- MODAL: AUTHENTICATION -->
   <div id="authModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-gemCard border border-gemBorder w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl">
       <button onclick="closeModal('authModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
@@ -211,7 +216,7 @@
         <span class="text-xs text-gray-300">Your Balance:</span>
         <span class="font-bold text-amber-400 text-sm flex items-center space-x-1">
           <i class="fa-solid fa-gem text-xs"></i>
-          <span id="modalGemCount">0</span> Gems (~£<span id="modalCashVal">0.00</span>)
+          <span id="modalGemCount">1,250</span> Gems (~£<span id="modalCashVal">1.25</span>)
         </span>
       </div>
 
@@ -268,15 +273,23 @@
   </div>
 
   <script>
-    // Supabase Initialization
+    // Supabase Credentials - Exact Lowercase Key
     const SUPABASE_URL = "https://uauozeqbgubekniqkszn.supabase.co";
-    const SUPABASE_ANON_KEY = "Sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_ANON_KEY = "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS";
+    
+    let supabase = null;
+    try {
+      if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch(e) {
+      console.warn("Supabase initialization error:", e);
+    }
 
-    // App State
+    // State Variables
     let currentUser = null;
     let userProfile = null;
-    let gems = 0;
+    let gems = 1250;
     let isSignUpMode = false;
     let selectedCost = 0;
     let selectedName = '';
@@ -314,35 +327,45 @@
 
     async function initApp() {
       renderOffers();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        await loadUserProfile();
-      } else {
-        updateUI();
+      updateUI();
+
+      if (supabase) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            currentUser = session.user;
+            await loadUserProfile();
+          }
+        } catch(e) {
+          console.warn("Auth check error:", e);
+        }
       }
     }
 
     async function loadUserProfile() {
-      if (!currentUser) return;
+      if (!currentUser || !supabase) return;
       
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
 
-      if (data) {
-        userProfile = data;
-        gems = data.gems || 0;
-      } else {
-        gems = 1250; // Default welcome bonus
-        await supabase.from('profiles').upsert({
-          id: currentUser.id,
-          email: currentUser.email,
-          username: currentUser.email.split('@')[0],
-          gems: gems
-        });
+        if (data) {
+          userProfile = data;
+          gems = data.gems !== undefined ? data.gems : 1250;
+        } else {
+          gems = 1250;
+          await supabase.from('profiles').upsert({
+            id: currentUser.id,
+            email: currentUser.email,
+            username: currentUser.email.split('@')[0],
+            gems: gems
+          });
+        }
+      } catch(e) {
+        console.warn("Profile load error:", e);
       }
       
       updateUI();
@@ -351,11 +374,15 @@
     async function saveGemsToDB(newAmount) {
       gems = newAmount;
       updateUI();
-      if (currentUser) {
-        await supabase
-          .from('profiles')
-          .update({ gems: gems })
-          .eq('id', currentUser.id);
+      if (currentUser && supabase) {
+        try {
+          await supabase
+            .from('profiles')
+            .update({ gems: gems })
+            .eq('id', currentUser.id);
+        } catch(e) {
+          console.warn("Save gems error:", e);
+        }
       }
     }
 
@@ -370,6 +397,11 @@
 
     async function handleAuth(e) {
       e.preventDefault();
+      if (!supabase) {
+        alert("Database connection offline. You can still use the app in guest mode!");
+        return;
+      }
+
       const email = document.getElementById('authEmail').value;
       const password = document.getElementById('authPassword').value;
       const username = document.getElementById('authUsername').value;
@@ -396,10 +428,12 @@
     }
 
     async function handleLogout() {
-      await supabase.auth.signOut();
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
       currentUser = null;
       userProfile = null;
-      gems = 0;
+      gems = 1250;
       updateUI();
       alert("Logged out successfully.");
     }
@@ -432,6 +466,8 @@
       const grid = document.getElementById('offerGrid');
       const modalList = document.getElementById('modalOfferList');
       const countLabel = document.getElementById('activeOfferCount');
+
+      if (!grid || !modalList) return;
 
       grid.innerHTML = '';
       modalList.innerHTML = '';
@@ -547,7 +583,7 @@
     }
 
     // Launch App
-    initApp();
+    document.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
 </html>
