@@ -281,8 +281,9 @@
     let currentTask = null;
     let supabase = null;
     let currentUser = null;
+    let userProfile = null;
 
-    // Initialize Supabase safely
+    // Initialize Supabase
     try {
       if (window.supabase) {
         supabase = window.supabase.createClient(
@@ -324,7 +325,65 @@
       }
     ];
 
-    // Immediate Render on Script Load
+    async function initApp() {
+      renderOffers();
+      updateUI();
+
+      if (supabase) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            currentUser = session.user;
+            await loadUserProfile();
+          }
+        } catch (e) {
+          console.warn("Auth session check error:", e);
+        }
+      }
+    }
+
+    async function loadUserProfile() {
+      if (!currentUser || !supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (data) {
+          userProfile = data;
+          gems = data.gems !== undefined ? data.gems : 1250;
+        } else {
+          gems = 1250;
+          await supabase.from('profiles').upsert({
+            id: currentUser.id,
+            email: currentUser.email,
+            username: currentUser.email.split('@')[0],
+            gems: gems
+          });
+        }
+      } catch (e) {
+        console.warn("Profile load error:", e);
+      }
+      updateUI();
+    }
+
+    async function saveGemsToDB(newAmount) {
+      gems = newAmount;
+      updateUI();
+      if (currentUser && supabase) {
+        try {
+          await supabase
+            .from('profiles')
+            .update({ gems: gems })
+            .eq('id', currentUser.id);
+        } catch (e) {
+          console.warn("Save gems error:", e);
+        }
+      }
+    }
+
     function renderOffers() {
       const grid = document.getElementById('offerGrid');
       const modalList = document.getElementById('modalOfferList');
@@ -374,6 +433,22 @@
       const cash = (gems / 1000).toFixed(2);
       document.getElementById('cashVal').innerText = cash;
       document.getElementById('modalCashVal').innerText = cash;
+
+      const navBtn = document.getElementById('authNavBtn');
+      const badge = document.getElementById('userWelcomeBadge');
+
+      if (currentUser) {
+        const displayName = userProfile?.username || currentUser.email.split('@')[0];
+        navBtn.innerText = "Log Out";
+        navBtn.onclick = handleLogout;
+        navBtn.className = "bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg transition text-sm";
+        badge.innerText = `🔥 Welcome, ${displayName}`;
+      } else {
+        navBtn.innerText = "Login / Sign Up";
+        navBtn.onclick = () => openModal('authModal');
+        navBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
+        badge.innerText = "👋 Welcome Guest";
+      }
     }
 
     function openModal(id) {
@@ -398,10 +473,10 @@
       openModal('detailModal');
     }
 
-    function confirmTaskCompletion() {
+    async function confirmTaskCompletion() {
       if (!currentTask) return;
-      gems += currentTask.reward;
-      updateUI();
+      const newGems = gems + currentTask.reward;
+      await saveGemsToDB(newGems);
 
       confetti({
         particleCount: 50,
@@ -428,15 +503,15 @@
       form.classList.remove('hidden');
     }
 
-    function processPayout() {
+    async function processPayout() {
       const input = document.getElementById('payoutDetail').value.trim();
       if (!input) {
         alert('Please enter your payout username or address.');
         return;
       }
 
-      gems -= selectedCost;
-      updateUI();
+      const newGems = gems - selectedCost;
+      await saveGemsToDB(newGems);
       
       alert(`✅ Payout Request Submitted!\n\n${selectedName} request logged for: ${input}\nYour balance has been updated.`);
       document.getElementById('payoutDetail').value = '';
@@ -455,18 +530,51 @@
 
     async function handleAuth(e) {
       e.preventDefault();
+      if (!supabase) {
+        alert("Database connection offline.");
+        return;
+      }
+
       const email = document.getElementById('authEmail').value;
       const password = document.getElementById('authPassword').value;
-      alert("✅ Auth mode simulated successfully! Connected to session.");
-      currentUser = { email: email };
-      document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
-      closeModal('authModal');
+      const username = document.getElementById('authUsername').value;
+
+      try {
+        if (isSignUpMode) {
+          const { data, error } = await supabase.auth.signUp({
+            email, password,
+            options: { data: { username: username || email.split('@')[0] } }
+          });
+          if (error) throw error;
+          alert("✅ Account created! You can now log in.");
+          toggleAuthMode();
+        } else {
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          currentUser = data.user;
+          await loadUserProfile();
+          alert("🎉 Welcome back!");
+          closeModal('authModal');
+        }
+      } catch (err) {
+        alert("Authentication Error: " + err.message);
+      }
     }
 
-    // Execute immediately on load
-    window.onload = function() {
-      renderOffers();
+    async function handleLogout() {
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+      currentUser = null;
+      userProfile = null;
+      gems = 1250;
       updateUI();
+      alert("Logged out successfully.");
+    }
+
+    // Run when page loads
+    window.onload = function() {
+      initApp();
     };
   </script>
 </body>
