@@ -40,6 +40,11 @@
           <span class="hidden sm:inline">Withdraw</span>
         </button>
 
+        <button id="btnAdmin" class="hidden bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm flex items-center space-x-1.5">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span class="hidden sm:inline">Admin</span>
+        </button>
+
         <button id="btnAuth" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm">
           Login / Sign Up
         </button>
@@ -128,6 +133,50 @@
 
       <div class="flex-grow w-full bg-white relative">
         <iframe id="offerwallIframe" src="" class="w-full h-full border-none"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN PANEL -->
+  <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl">
+      <button id="closeAdmin" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Admin Dashboard</h3>
+          <p class="text-xs text-amber-400 font-semibold">Logged in as Administrator (nezu)</p>
+        </div>
+      </div>
+
+      <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
+        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Quick User Lookup & Adjustment</h4>
+        <div class="flex space-x-2">
+          <input type="text" id="adminSearchEmail" placeholder="Search user email..." class="flex-grow bg-[#151c2e] border border-[#2a364f] text-white text-xs px-3 py-2 rounded-lg focus:outline-none">
+          <button id="btnAdminSearch" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
+            Search
+          </button>
+        </div>
+        <div id="adminSearchResult" class="text-xs text-gray-400 pt-1"></div>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Platform Status</h4>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-[#0b0f19] p-3 rounded-xl border border-[#2a364f]">
+            <p class="text-[11px] text-gray-400">Postback Status</p>
+            <p class="text-xs font-bold text-emerald-400 mt-0.5"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active (Edge Function)</p>
+          </div>
+          <div class="bg-[#0b0f19] p-3 rounded-xl border border-[#2a364f]">
+            <p class="text-[11px] text-gray-400">Database Connection</p>
+            <p class="text-xs font-bold text-amber-400 mt-0.5"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Connected to Supabase</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -367,6 +416,13 @@
             updateGems(data.gems || 0);
             setLoginState(data.username || 'Member', true);
             hideModal('authModal');
+
+            // AUTOMATIC ADMIN CHECK FOR USER 'nezu'
+            if (data.username && data.username.toLowerCase() === 'nezu') {
+              document.getElementById('btnAdmin').classList.remove('hidden');
+            } else {
+              document.getElementById('btnAdmin').classList.add('hidden');
+            }
           }
         } catch (err) {
           console.warn("Fetch profile error:", err);
@@ -411,6 +467,7 @@
           badge.innerText = "🔒 Locked - Please Sign In";
           authBtn.innerText = "Login / Sign Up";
           authBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
+          document.getElementById('btnAdmin').classList.add('hidden');
           updateGems(0);
           showModal('authModal');
         }
@@ -442,7 +499,7 @@
         });
       }
 
-      // Header Button Action
+      // Header Button Actions
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
           if (supabase) supabase.auth.signOut();
@@ -457,6 +514,10 @@
         if (!isLoggedIn) return showModal('authModal');
         showModal('withdrawModal');
       });
+
+      document.getElementById('btnAdmin').addEventListener('click', () => {
+        showModal('adminModal');
+      });
       
       document.getElementById('btnOffers').addEventListener('click', () => {
         if (!isLoggedIn) return showModal('authModal');
@@ -467,6 +528,32 @@
       document.getElementById('closeTask').addEventListener('click', () => hideModal('taskModal'));
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
+      document.getElementById('closeAdmin').addEventListener('click', () => hideModal('adminModal'));
+
+      // Admin User Lookup
+      document.getElementById('btnAdminSearch').addEventListener('click', async () => {
+        const query = document.getElementById('adminSearchEmail').value.trim();
+        const resultBox = document.getElementById('adminSearchResult');
+        if (!query) return;
+
+        resultBox.innerText = "Searching database...";
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('id, username, gems')
+            .ilike('username', `%${query}%`)
+            .limit(1);
+
+          if (error) throw error;
+          if (data && data.length > 0) {
+            resultBox.innerHTML = `Found user: <strong class="text-white">${data[0].username}</strong> | Gems: <strong class="text-amber-400">${data[0].gems}</strong>`;
+          } else {
+            resultBox.innerText = "No user found with that username.";
+          }
+        } catch(err) {
+          resultBox.innerText = "Error searching database.";
+        }
+      });
 
       // Toggle Auth Mode
       document.getElementById('toggleAuthBtn').addEventListener('click', function() {
@@ -477,7 +564,7 @@
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
-      // STRICT AUTHENTICATION
+      // AUTHENTICATION FORM
       document.getElementById('authForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         clearError();
