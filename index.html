@@ -309,7 +309,7 @@
       try {
         if (window.supabase) {
           supabase = window.supabase.createClient(
-            "https://uauozeqbgubekniqkszn.supabase.co",
+            "https://uauozeqbgubwkneqkszn.supabase.co",
             "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS"
           );
         }
@@ -477,7 +477,7 @@
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
-      // STRICT AUTHENTICATION (NO FALLBACK)
+      // STRICT AUTHENTICATION
       document.getElementById('authForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         clearError();
