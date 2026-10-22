@@ -65,6 +65,33 @@
       </div>
     </div>
 
+    <!-- Gem Converter Section -->
+    <div class="bg-[#151c2e] border border-[#2a364f] rounded-2xl p-5 shadow-lg space-y-3">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-calculator text-amber-400"></i>
+        <h2 class="text-base font-bold text-white">Gem to Cash Converter</h2>
+      </div>
+      <p class="text-xs text-gray-400">Rate: <strong>1,000 Gems = £1.00 GBP</strong>. Enter gems or pounds to see the value conversion.</p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div class="space-y-1">
+          <label class="text-xs text-gray-400">Gems Amount</label>
+          <div class="relative">
+            <input type="number" id="calcGems" value="1000" class="w-full bg-[#0b0f19] border border-[#2a364f] text-amber-400 font-bold text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-amber-500">
+            <i class="fa-solid fa-gem absolute right-3 top-3 text-amber-400 text-xs"></i>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-xs text-gray-400">Cash Value (£ GBP)</label>
+          <div class="relative">
+            <input type="number" step="0.01" id="calcCash" value="1.00" class="w-full bg-[#0b0f19] border border-[#2a364f] text-emerald-400 font-bold text-sm px-3.5 py-2 rounded-lg focus:outline-none focus:border-emerald-500">
+            <span class="absolute right-3 top-2 text-emerald-400 font-bold text-xs">£</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Active Offers Feed -->
     <div class="space-y-4">
       <div class="flex justify-between items-center">
@@ -251,6 +278,22 @@
         console.warn("Supabase init:", e);
       }
 
+      // Converter Logic
+      const calcGems = document.getElementById('calcGems');
+      const calcCash = document.getElementById('calcCash');
+
+      if (calcGems && calcCash) {
+        calcGems.addEventListener('input', function() {
+          const val = parseFloat(calcGems.value) || 0;
+          calcCash.value = (val / 1000).toFixed(2);
+        });
+
+        calcCash.addEventListener('input', function() {
+          const val = parseFloat(calcCash.value) || 0;
+          calcGems.value = Math.round(val * 1000);
+        });
+      }
+
       const offers = [
         { id: 1, title: "Test Featured Mobile App", reward: 600, typeTag: "App Install", desc: "Install app and complete tutorial.", url: "https://www.cpalead.com" },
         { id: 2, title: "Gaming Trivia Quiz", reward: 250, typeTag: "Quiz", desc: "Complete 10 trivia questions.", url: "https://www.cpalead.com" },
@@ -290,21 +333,32 @@
         e.preventDefault();
         const email = document.getElementById('authEmail').value;
         const pass = document.getElementById('authPassword').value;
-        if (!supabase) return;
+
+        if (!supabase) {
+          alert("Supabase client is offline.");
+          return;
+        }
 
         try {
           if (isSignUp) {
-            const { error } = await supabase.auth.signUp({ email, password: pass });
+            const { data, error } = await supabase.auth.signUp({ 
+              email: email, 
+              password: pass 
+            });
             if (error) throw error;
-            alert("Account created!");
+            alert("✅ Account created! Please check your email or log in now.");
           } else {
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+            const { data, error } = await supabase.auth.signInWithPassword({ 
+              email: email, 
+              password: pass 
+            });
             if (error) throw error;
-            alert("Signed in!");
+            alert("🎉 Logged in successfully!");
+            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${email.split('@')[0]}`;
           }
           hideModal('authModal');
         } catch(err) {
-          alert(err.message);
+          alert("Auth Error: " + err.message);
         }
       });
 
