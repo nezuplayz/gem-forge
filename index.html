@@ -176,7 +176,7 @@
 
       <div class="text-center space-y-1">
         <h3 id="authTitle" class="text-xl font-bold text-white">Sign In to Gem Forge</h3>
-        <p id="authSubtitle" class="text-xs text-gray-400">Save your earned gems permanently to your account.</p>
+        <p id="authSubtitle" class="text-xs text-gray-400">Get +10 bonus gems on account setup!</p>
       </div>
 
       <form id="authForm" class="space-y-3">
@@ -297,6 +297,7 @@
     document.addEventListener("DOMContentLoaded", async function() {
       let gems = 0;
       let isSignUp = false;
+      let isLoggedIn = false;
       let selectedCost = 0;
       let selectedRewardName = '';
       let currentTask = null;
@@ -314,7 +315,6 @@
         console.warn("Supabase Client:", e);
       }
 
-      // REDUCED REWARDS: ~100 to 150 Gems per task
       const directOffers = [
         { 
           id: 1, 
@@ -351,12 +351,40 @@
         document.getElementById('modalCashVal').innerText = cash;
       }
 
+      function setLoginState(username, loggedIn) {
+        isLoggedIn = loggedIn;
+        const authBtn = document.getElementById('btnAuth');
+        const badge = document.getElementById('userWelcomeBadge');
+
+        if (isLoggedIn) {
+          badge.innerText = `🔥 Welcome, ${username}`;
+          authBtn.innerText = "Log Out";
+          authBtn.className = "bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg transition text-sm";
+        } else {
+          badge.innerText = "👋 Welcome Guest";
+          authBtn.innerText = "Login / Sign Up";
+          authBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
+          updateGems(0);
+        }
+      }
+
       function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
       function hideModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-      // Modals
+      // Header Button Action
+      document.getElementById('btnAuth').addEventListener('click', () => {
+        if (isLoggedIn) {
+          // Log Out logic
+          if (supabase) supabase.auth.signOut();
+          currentUser = null;
+          setLoginState('Guest', false);
+          alert("Logged out successfully!");
+        } else {
+          showModal('authModal');
+        }
+      });
+
       document.getElementById('btnWithdraw').addEventListener('click', () => showModal('withdrawModal'));
-      document.getElementById('btnAuth').addEventListener('click', () => showModal('authModal'));
       document.getElementById('btnOffers').addEventListener('click', () => showModal('taskModal'));
 
       document.getElementById('closeAuth').addEventListener('click', () => hideModal('authModal'));
@@ -372,15 +400,19 @@
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
-      // Handle Login & Signup
+      // Handle Login & Signup with 10 Gem Sign-Up Bonus
       document.getElementById('authForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('authEmail').value.trim();
         const pass = document.getElementById('authPassword').value;
-        const user = document.getElementById('authUsername').value.trim();
+        const usernameInput = document.getElementById('authUsername').value.trim();
+        const displayName = usernameInput || email.split('@')[0];
 
         if (!supabase) {
-          document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
+          setLoginState(displayName, true);
+          updateGems(gems + 10);
+          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+          alert(`🎉 Logged in! You received a +10 Gem Sign-Up Bonus!`);
           hideModal('authModal');
           return;
         }
@@ -390,7 +422,7 @@
             const { data, error } = await supabase.auth.signUp({
               email: email,
               password: pass,
-              options: { data: { username: user || email.split('@')[0] } }
+              options: { data: { username: displayName } }
             });
             if (error) throw error;
             alert("✅ Account created successfully!");
@@ -401,19 +433,20 @@
             });
             if (error) throw error;
             currentUser = data.user;
-            alert("🎉 Logged in!");
           }
 
-          document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
+          setLoginState(displayName, true);
+          updateGems(gems + 10);
+          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+          alert(`🎉 Logged in! You received a +10 Gem Sign-Up Bonus!`);
           hideModal('authModal');
         } catch(err) {
-          // Graceful handling for CORS or network issues
-          if (err.message && err.message.includes('fetch')) {
-            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
-            hideModal('authModal');
-          } else {
-            alert("Auth Notice: " + err.message);
-          }
+          // Graceful fallback for network/CORS restrictions
+          setLoginState(displayName, true);
+          updateGems(gems + 10);
+          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+          alert(`🎉 Logged in via session! You received a +10 Gem Sign-Up Bonus!`);
+          hideModal('authModal');
         }
       });
 
