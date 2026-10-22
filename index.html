@@ -54,12 +54,12 @@
     <div class="bg-gradient-to-r from-purple-900/40 via-[#151c2e] to-[#151c2e] border border-purple-500/30 rounded-2xl p-6 relative overflow-hidden shadow-xl">
       <div class="relative z-10 max-w-lg space-y-2">
         <span id="userWelcomeBadge" class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-purple-500/30">
-          👋 Welcome Guest
+          🔒 Locked - Please Sign In
         </span>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Verified Tasks, Earn Gems</h1>
-        <p class="text-gray-400 text-sm">Gems credit automatically upon verified offer completion by CPAlead.</p>
+        <p class="text-gray-400 text-sm">Sign in to sync your balance and unlock the offerwall & tasks.</p>
         <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
-          <i class="fa-solid fa-layer-group"></i>
+          <i class="fa-solid  fa-layer-group"></i>
           <span>Open Full CPAlead Offerwall</span>
         </button>
       </div>
@@ -127,7 +127,7 @@
       </div>
 
       <div class="flex-grow w-full bg-white relative">
-        <iframe id="offerwallIframe" src="https://www.fastsvr.com/unlock/pQ251ivJ" class="w-full h-full border-none"></iframe>
+        <iframe id="offerwallIframe" src="" class="w-full h-full border-none"></iframe>
       </div>
     </div>
   </div>
@@ -171,13 +171,9 @@
     </div>
   </div>
 
-  <!-- MODAL: AUTHENTICATION -->
-  <div id="authModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+  <!-- MODAL: AUTHENTICATION (MANDATORY FOR ACCESS) -->
+  <div id="authModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl">
-      <button id="closeAuth" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
       <div class="text-center space-y-1">
         <h3 id="authTitle" class="text-xl font-bold text-white">Sign In to Gem Forge</h3>
         <p id="authSubtitle" class="text-xs text-gray-400">Get +10 bonus gems on account setup!</p>
@@ -298,7 +294,7 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", async function() {
       let gems = 0;
       let isSignUp = false;
       let isLoggedIn = false;
@@ -344,8 +340,39 @@
       ];
 
       function getDynamicLockerUrl() {
-        const subId = currentUser ? currentUser.id : 'guest_' + Math.floor(Math.random()*10000);
+        const subId = currentUser ? currentUser.id : 'guest';
         return `https://www.fastsvr.com/unlock/pQ251ivJ?subid=${subId}`;
+      }
+
+      async function fetchUserGems(userId) {
+        if (!supabase) return;
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('gems, username')
+            .eq('id', userId)
+            .single();
+          if (data) {
+            updateGems(data.gems || 0);
+            setLoginState(data.username || 'Member', true);
+            hideModal('authModal');
+          }
+        } catch (err) {
+          console.warn("Fetch profile error:", err);
+        }
+      }
+
+      // Check active Supabase session on load
+      if (supabase) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && session.user) {
+          currentUser = session.user;
+          await fetchUserGems(currentUser.id);
+        } else {
+          showModal('authModal'); // Force login if not authenticated
+        }
+      } else {
+        showModal('authModal'); // Force login modal if offline
       }
 
       function updateGems(val) {
@@ -355,6 +382,18 @@
         const cash = (gems / 1000).toFixed(2);
         document.getElementById('cashVal').innerText = cash;
         document.getElementById('modalCashVal').innerText = cash;
+      }
+
+      async function saveGemsToSupabase(newGemTotal) {
+        if (!supabase || !currentUser) return;
+        try {
+          await supabase
+            .from('profiles')
+            .update({ gems: newGemTotal })
+            .eq('id', currentUser.id);
+        } catch (err) {
+          console.warn("Save gems error:", err);
+        }
       }
 
       function setLoginState(username, loggedIn) {
@@ -367,10 +406,11 @@
           authBtn.innerText = "Log Out";
           authBtn.className = "bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg transition text-sm";
         } else {
-          badge.innerText = "👋 Welcome Guest";
+          badge.innerText = "🔒 Locked - Please Sign In";
           authBtn.innerText = "Login / Sign Up";
           authBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
           updateGems(0);
+          showModal('authModal');
         }
       }
 
@@ -397,20 +437,22 @@
           if (supabase) supabase.auth.signOut();
           currentUser = null;
           setLoginState('Guest', false);
-          alert("Logged out successfully!");
         } else {
           showModal('authModal');
         }
       });
 
-      document.getElementById('btnWithdraw').addEventListener('click', () => showModal('withdrawModal'));
+      document.getElementById('btnWithdraw').addEventListener('click', () => {
+        if (!isLoggedIn) return showModal('authModal');
+        showModal('withdrawModal');
+      });
       
       document.getElementById('btnOffers').addEventListener('click', () => {
+        if (!isLoggedIn) return showModal('authModal');
         document.getElementById('offerwallIframe').src = getDynamicLockerUrl();
         showModal('taskModal');
       });
 
-      document.getElementById('closeAuth').addEventListener('click', () => hideModal('authModal'));
       document.getElementById('closeTask').addEventListener('click', () => hideModal('taskModal'));
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
@@ -423,7 +465,7 @@
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
-      // Handle Login & Signup with 10 Gem Sign-Up Bonus
+      // Handle Login & Signup with Database Sync
       document.getElementById('authForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const email = document.getElementById('authEmail').value.trim();
@@ -432,10 +474,9 @@
         const displayName = usernameInput || email.split('@')[0];
 
         if (!supabase) {
+          currentUser = { id: 'offline_user' };
           setLoginState(displayName, true);
-          updateGems(gems + 10);
-          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
-          alert(`🎉 Logged in! You received a +10 Gem Sign-Up Bonus!`);
+          updateGems(10);
           hideModal('authModal');
           return;
         }
@@ -448,26 +489,37 @@
               options: { data: { username: displayName } }
             });
             if (error) throw error;
-            alert("✅ Account created successfully!");
+            if (data.user) {
+              currentUser = data.user;
+              // Add bonus
+              await saveGemsToSupabase(10);
+            }
+            alert("✅ Account created successfully! +10 Bonus Gems added.");
           } else {
             const { data, error } = await supabase.auth.signInWithPassword({
               email: email,
               password: pass
             });
             if (error) throw error;
-            currentUser = data.user;
+            if (data.user) {
+              currentUser = data.user;
+              await fetchUserGems(currentUser.id);
+            }
           }
 
-          setLoginState(displayName, true);
-          updateGems(gems + 10);
+          if (!isSignUp) {
+            setLoginState(displayName, true);
+          } else {
+            setLoginState(displayName, true);
+            updateGems(10);
+          }
           confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
-          alert(`🎉 Logged in! You received a +10 Gem Sign-Up Bonus!`);
           hideModal('authModal');
         } catch(err) {
+          // Fallback session mode on network block
+          currentUser = { id: 'fallback_user' };
           setLoginState(displayName, true);
-          updateGems(gems + 10);
-          confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
-          alert(`🎉 Logged in via session! You received a +10 Gem Sign-Up Bonus!`);
+          updateGems(10);
           hideModal('authModal');
         }
       });
@@ -492,6 +544,7 @@
           </button>
         `;
         card.querySelector('.btnViewTask').addEventListener('click', () => {
+          if (!isLoggedIn) return showModal('authModal');
           currentTask = o;
           document.getElementById('detailTitle').innerText = o.title;
           document.getElementById('detailCategory').innerText = `${o.typeTag} • Reward: +${o.reward} Gems`;
@@ -524,18 +577,20 @@
       setupRewardSelection('payoutPaypal', 1000, '£1.00 PayPal Cash (1,000 Gems)');
       setupRewardSelection('payoutCrypto', 1000, '£1.00 Litecoin / Crypto (1,000 Gems)');
 
-      document.getElementById('btnSubmitPayout').addEventListener('click', () => {
+      document.getElementById('btnSubmitPayout').addEventListener('click', async () => {
         const input = document.getElementById('payoutDetail').value.trim();
         if (!input) return alert('Please enter your account email or username.');
         if (gems < selectedCost) return alert('Not enough gems for this cashout.');
-        updateGems(gems - selectedCost);
+        
+        const newTotal = gems - selectedCost;
+        updateGems(newTotal);
+        await saveGemsToSupabase(newTotal);
+
         alert(`🎉 Payout Request Submitted!\n\nReward: ${selectedRewardName}\nDestination: ${input}\n\nYour request has been logged!`);
         document.getElementById('payoutDetail').value = '';
         document.getElementById('payoutForm').classList.add('hidden');
         hideModal('withdrawModal');
       });
-
-      updateGems(0);
     });
   </script>
 </body>
