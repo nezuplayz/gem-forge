@@ -125,16 +125,48 @@
   </main>
 
   <!-- Enhanced Footer -->
-  <footer class="max-w-5xl mx-auto w-full px-4 mt-16 text-center text-xs text-gray-400 border-t border-[#2a364f] pt-6 space-y-2">
-    <div class="flex justify-center items-center space-x-4 text-gray-400 text-xs">
+  <footer class="max-w-5xl mx-auto w-full px-4 mt-16 text-center text-xs text-gray-400 border-t border-[#2a364f] pt-6 space-y-3">
+    <div class="flex flex-wrap justify-center items-center gap-3 text-gray-400 text-xs">
       <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Secure SSL Active</span>
       <span>•</span>
       <span><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Instant Postbacks</span>
       <span>•</span>
       <span><i class="fa-solid fa-heart text-purple-400 mr-1"></i> Built by Nezu</span>
+      <span>•</span>
+      <button id="btnHowIDidIt" class="text-amber-400 hover:text-amber-300 font-bold underline transition">
+        How I Did It?
+      </button>
     </div>
     <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or CPAlead.</p>
   </footer>
+
+  <!-- MODAL: HOW I DID IT -->
+  <div id="howModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
+      <button id="closeHow" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">How I Did It</h3>
+          <p class="text-xs text-gray-400">a quick 2-week mess</p>
+        </div>
+      </div>
+
+      <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
+        <p>
+          ngl this took me like 2 solid weeks of messing around with tailwind and breaking supabase database stuff at 2am until it actually worked properly.
+        </p>
+        <p>
+          strung together HTML, JS, and some edge function postbacks so task rewards credit automatically. keeping it short cause my college assignments are literally piled up to the roof right now and i need to go finish them. enjoy the site!
+        </p>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: CPALEAD FULL OFFERWALL IFRAME -->
   <div id="taskModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
@@ -584,6 +616,10 @@
         showModal('adminModal');
       });
       
+      document.getElementById('btnHowIDidIt').addEventListener('click', () => {
+        showModal('howModal');
+      });
+
       document.getElementById('btnOffers').addEventListener('click', () => {
         if (!isLoggedIn) return showModal('authModal');
         document.getElementById('offerwallIframe').src = getDynamicLockerUrl();
@@ -594,6 +630,7 @@
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
       document.getElementById('closeAdmin').addEventListener('click', () => hideModal('adminModal'));
+      document.getElementById('closeHow').addEventListener('click', () => hideModal('howModal'));
 
       document.getElementById('btnAdminSearch').addEventListener('click', async () => {
         const query = document.getElementById('adminSearchEmail').value.trim();
