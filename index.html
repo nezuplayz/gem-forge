@@ -31,8 +31,8 @@
       <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="bg-[#0b0f19] border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
           <i class="fa-solid fa-gem text-amber-400"></i>
-          <span id="gemCount" class="font-bold text-amber-300">1,250</span>
-          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">1.25</span>)</span>
+          <span id="gemCount" class="font-bold text-amber-300">0</span>
+          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">0.00</span>)</span>
         </div>
         
         <button id="btnWithdraw" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-md hover:brightness-110 transition flex items-center space-x-1.5 text-sm">
@@ -208,7 +208,7 @@
     </div>
   </div>
 
-  <!-- MODAL: WITHDRAW (INCLUDES AMAZON GIFT CARDS & ROBUX) -->
+  <!-- MODAL: WITHDRAW -->
   <div id="withdrawModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl">
       <button id="closeWithdraw" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
@@ -227,12 +227,11 @@
         <span class="text-xs text-gray-300">Your Balance:</span>
         <span class="font-bold text-amber-400 text-sm flex items-center space-x-1">
           <i class="fa-solid fa-gem text-xs"></i>
-          <span id="modalGemCount">1,250</span> Gems (~£<span id="modalCashVal">1.25</span>)
+          <span id="modalGemCount">0</span> Gems (~£<span id="modalCashVal">0.00</span>)
         </span>
       </div>
 
       <div class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
-        <!-- Robux -->
         <div id="payoutRobux" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-solid fa-cube"></i>
@@ -243,7 +242,6 @@
           </div>
         </div>
 
-        <!-- Amazon Gift Card £2 -->
         <div id="payoutAmazon2" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-brands fa-amazon"></i>
@@ -254,7 +252,6 @@
           </div>
         </div>
 
-        <!-- Amazon Gift Card £5 -->
         <div id="payoutAmazon5" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-brands fa-amazon"></i>
@@ -265,7 +262,6 @@
           </div>
         </div>
 
-        <!-- PayPal Cash -->
         <div id="payoutPaypal" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-blue-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-brands fa-paypal"></i>
@@ -276,7 +272,6 @@
           </div>
         </div>
 
-        <!-- Crypto / LTC -->
         <div id="payoutCrypto" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-purple-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold">
             <i class="fa-solid fa-coins"></i>
@@ -299,35 +294,50 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      let gems = 1250;
+    document.addEventListener("DOMContentLoaded", async function() {
+      let gems = 0;
+      let isSignUp = false;
       let selectedCost = 0;
       let selectedRewardName = '';
       let currentTask = null;
+      let supabase = null;
+      let currentUser = null;
 
+      try {
+        if (window.supabase) {
+          supabase = window.supabase.createClient(
+            "https://uauozeqbgubekniqkszn.supabase.co",
+            "sb_publishable_yI3Ah-hIEcHnVmC4sF8oEA_YOo9weDS"
+          );
+        }
+      } catch (e) {
+        console.warn("Supabase Client:", e);
+      }
+
+      // REDUCED REWARDS: ~100 to 150 Gems per task
       const directOffers = [
         { 
           id: 1, 
-          title: "Featured App Install", 
-          reward: 750, 
+          title: "Featured Mobile Task", 
+          reward: 150, 
           typeTag: "Top Rated", 
-          desc: "Complete any featured mobile offer to receive gems.", 
+          desc: "Complete the app download and tutorial to earn 150 gems.", 
           url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
         },
         { 
           id: 2, 
-          title: "Quick Rewards Task", 
-          reward: 500, 
-          typeTag: "Easy", 
-          desc: "Complete an available task or survey to earn gems.", 
+          title: "Quick Survey Offer", 
+          reward: 100, 
+          typeTag: "Easy Task", 
+          desc: "Answer a brief feedback survey to claim 100 gems.", 
           url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
         },
         { 
           id: 3, 
-          title: "Bonus Game Download", 
-          reward: 600, 
+          title: "App Exploration", 
+          reward: 120, 
           typeTag: "Popular", 
-          desc: "Install and launch the game on your mobile device.", 
+          desc: "Install and try out the game for 2 minutes to claim 120 gems.", 
           url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
         }
       ];
@@ -353,6 +363,59 @@
       document.getElementById('closeTask').addEventListener('click', () => hideModal('taskModal'));
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
+
+      // Toggle Auth Mode
+      document.getElementById('toggleAuthBtn').addEventListener('click', function() {
+        isSignUp = !isSignUp;
+        document.getElementById('authTitle').innerText = isSignUp ? "Create Account" : "Sign In";
+        document.getElementById('authSubmitBtn').innerText = isSignUp ? "Create Account" : "Sign In";
+        document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
+      });
+
+      // Handle Login & Signup
+      document.getElementById('authForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('authEmail').value.trim();
+        const pass = document.getElementById('authPassword').value;
+        const user = document.getElementById('authUsername').value.trim();
+
+        if (!supabase) {
+          document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
+          hideModal('authModal');
+          return;
+        }
+
+        try {
+          if (isSignUp) {
+            const { data, error } = await supabase.auth.signUp({
+              email: email,
+              password: pass,
+              options: { data: { username: user || email.split('@')[0] } }
+            });
+            if (error) throw error;
+            alert("✅ Account created successfully!");
+          } else {
+            const { data, error } = await supabase.auth.signInWithPassword({
+              email: email,
+              password: pass
+            });
+            if (error) throw error;
+            currentUser = data.user;
+            alert("🎉 Logged in!");
+          }
+
+          document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
+          hideModal('authModal');
+        } catch(err) {
+          // Graceful handling for CORS or network issues
+          if (err.message && err.message.includes('fetch')) {
+            document.getElementById('userWelcomeBadge').innerText = `🔥 Welcome, ${user || email.split('@')[0]}`;
+            hideModal('authModal');
+          } else {
+            alert("Auth Notice: " + err.message);
+          }
+        }
+      });
 
       // Render Direct Offers
       const grid = document.getElementById('offerGrid');
@@ -392,7 +455,7 @@
         hideModal('detailModal');
       });
 
-      // Payout Option Selectors
+      // Cashout Selectors
       function setupRewardSelection(elementId, cost, rewardText) {
         document.getElementById(elementId).addEventListener('click', () => {
           selectedCost = cost;
@@ -419,7 +482,7 @@
         hideModal('withdrawModal');
       });
 
-      updateGems(1250);
+      updateGems(0);
     });
   </script>
 </body>
