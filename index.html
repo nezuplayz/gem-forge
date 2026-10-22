@@ -56,8 +56,8 @@
         <span id="userWelcomeBadge" class="bg-purple-500/20 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-purple-500/30">
           👋 Welcome Guest
         </span>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete App Tasks, Earn Gems</h1>
-        <p class="text-gray-400 text-sm">Download featured apps or complete quick tasks to cash out Robux, Amazon Cards, PayPal, or Crypto.</p>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Verified Tasks, Earn Gems</h1>
+        <p class="text-gray-400 text-sm">Gems credit automatically upon verified offer completion by CPAlead.</p>
         <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
           <i class="fa-solid fa-layer-group"></i>
           <span>Open Full CPAlead Offerwall</span>
@@ -97,9 +97,9 @@
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Featured Tasks</span>
+          <span>Verified CPA Offers</span>
         </h2>
-        <span class="text-xs text-gray-400 font-medium">All Devices & Mobile Friendly</span>
+        <span class="text-xs text-gray-400 font-medium">Automatic Crediting</span>
       </div>
 
       <div id="offerGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -132,7 +132,7 @@
     </div>
   </div>
 
-  <!-- MODAL: TASK DETAIL -->
+  <!-- MODAL: TASK DETAIL (VERIFIED LOGIC) -->
   <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
       <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
@@ -141,7 +141,7 @@
 
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30">
-          <i class="fa-solid fa-mobile-screen-button"></i>
+          <i class="fa-solid fa-shield-halved"></i>
         </div>
         <div>
           <h3 id="detailTitle" class="text-lg font-bold text-white">App Install Task</h3>
@@ -150,19 +150,23 @@
       </div>
 
       <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
-        <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions to earn:</p>
+        <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions:</p>
         <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed"></p>
       </div>
 
-      <div class="space-y-2">
-        <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-2.5 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
-          <span>1. Open Offer</span>
+      <div class="space-y-3 pt-1">
+        <a id="startTaskBtn" href="#" target="_blank" onclick="markTaskInProgress()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
+          <span>Launch Offer in CPAlead</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
 
-        <button id="claimTaskBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm">
-          2. Claim Gems
-        </button>
+        <div id="trackingNotice" class="bg-purple-950/40 border border-purple-500/30 rounded-xl p-3 text-center space-y-1">
+          <p class="text-xs font-bold text-purple-300 flex items-center justify-center space-x-1.5">
+            <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
+            <span>Automatic Crediting Active</span>
+          </p>
+          <p class="text-[11px] text-gray-400">Complete the offer instructions in the opened tab. Gems will credit automatically upon advertiser verification.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -294,16 +298,16 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-      let gems = 0;
-      let isSignUp = false;
-      let isLoggedIn = false;
-      let selectedCost = 0;
-      let selectedRewardName = '';
-      let currentTask = null;
-      let supabase = null;
-      let currentUser = null;
+    let gems = 0;
+    let isSignUp = false;
+    let isLoggedIn = false;
+    let selectedCost = 0;
+    let selectedRewardName = '';
+    let currentTask = null;
+    let supabase = null;
+    let currentUser = null;
 
+    document.addEventListener("DOMContentLoaded", async function() {
       try {
         if (window.supabase) {
           supabase = window.supabase.createClient(
@@ -318,29 +322,31 @@
       const directOffers = [
         { 
           id: 1, 
-          title: "Featured Mobile Task", 
+          title: "Featured Mobile App Task", 
           reward: 150, 
           typeTag: "Top Rated", 
-          desc: "Complete the app download and tutorial to earn 150 gems.", 
-          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
+          desc: "Complete the installation and tutorial steps on your mobile phone to earn gems automatically." 
         },
         { 
           id: 2, 
           title: "Quick Survey Offer", 
           reward: 100, 
           typeTag: "Easy Task", 
-          desc: "Answer a brief feedback survey to claim 100 gems.", 
-          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
+          desc: "Answer the short opinion survey through the CPAlead link to receive gems." 
         },
         { 
           id: 3, 
-          title: "App Exploration", 
+          title: "App Exploration Offer", 
           reward: 120, 
           typeTag: "Popular", 
-          desc: "Install and try out the game for 2 minutes to claim 120 gems.", 
-          url: "https://www.fastsvr.com/unlock/pQ251ivJ" 
+          desc: "Download and explore the featured app for 2 minutes to trigger automatic crediting." 
         }
       ];
+
+      function getDynamicLockerUrl() {
+        const subId = currentUser ? currentUser.id : 'guest_' + Math.floor(Math.random()*10000);
+        return `https://www.fastsvr.com/unlock/pQ251ivJ?subid=${subId}`;
+      }
 
       function updateGems(val) {
         gems = val;
@@ -374,7 +380,6 @@
       // Header Button Action
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
-          // Log Out logic
           if (supabase) supabase.auth.signOut();
           currentUser = null;
           setLoginState('Guest', false);
@@ -385,7 +390,12 @@
       });
 
       document.getElementById('btnWithdraw').addEventListener('click', () => showModal('withdrawModal'));
-      document.getElementById('btnOffers').addEventListener('click', () => showModal('taskModal'));
+      
+      // Open Offerwall with Dynamic User Tag
+      document.getElementById('btnOffers').addEventListener('click', () => {
+        document.getElementById('offerwallIframe').src = getDynamicLockerUrl();
+        showModal('taskModal');
+      });
 
       document.getElementById('closeAuth').addEventListener('click', () => hideModal('authModal'));
       document.getElementById('closeTask').addEventListener('click', () => hideModal('taskModal'));
@@ -441,7 +451,6 @@
           alert(`🎉 Logged in! You received a +10 Gem Sign-Up Bonus!`);
           hideModal('authModal');
         } catch(err) {
-          // Graceful fallback for network/CORS restrictions
           setLoginState(displayName, true);
           updateGems(gems + 10);
           confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
@@ -466,26 +475,18 @@
             <p class="text-xs text-gray-400 mt-1">${o.desc}</p>
           </div>
           <button class="btnViewTask w-full bg-[#0b0f19] hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
-            View App Steps
+            View Instructions
           </button>
         `;
         card.querySelector('.btnViewTask').addEventListener('click', () => {
           currentTask = o;
           document.getElementById('detailTitle').innerText = o.title;
-          document.getElementById('detailCategory').innerText = `${o.typeTag} • +${o.reward} Gems`;
+          document.getElementById('detailCategory').innerText = `${o.typeTag} • Reward: +${o.reward} Gems`;
           document.getElementById('detailDesc').innerText = o.desc;
-          document.getElementById('startTaskBtn').href = o.url;
+          document.getElementById('startTaskBtn').href = getDynamicLockerUrl();
           showModal('detailModal');
         });
         grid.appendChild(card);
-      });
-
-      document.getElementById('claimTaskBtn').addEventListener('click', () => {
-        if (!currentTask) return;
-        updateGems(gems + currentTask.reward);
-        confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
-        alert(`Earned +${currentTask.reward} Gems!`);
-        hideModal('detailModal');
       });
 
       // Cashout Selectors
@@ -517,6 +518,12 @@
 
       updateGems(0);
     });
+
+    function markTaskInProgress() {
+      setTimeout(() => {
+        alert("ℹ️ Task tab launched! Complete the offer in the opened window. Your gems will credit automatically upon advertiser verification.");
+      }, 500);
+    }
   </script>
 </body>
 </html>
