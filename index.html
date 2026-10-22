@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gem Forge - Micro-Earning Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23f59e0b' d='M116.7 33.8c4.5-6.1 11.7-9.8 19.3-9.8l239.9 0c7.6 0 14.8 3.6 19.3 9.8l112 152c5 6.8 5.6 15.8 1.5 23.2l-239.9 432c-4.3 7.8-12.5 12.7-21.4 12.7s-17.1-4.9-21.4-12.7l-239.9-432c-4.1-7.4-3.5-16.4 1.5-23.2l112-152z'/></svg>" type="image/svg+xml">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -62,11 +63,20 @@
           🔒 Locked - Please Sign In
         </span>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Verified Tasks, Earn Gems</h1>
-        <p class="text-gray-400 text-sm">Sign in to sync your balance and unlock the offerwall & tasks.</p>
-        <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
-          <i class="fa-solid fa-layer-group"></i>
-          <span>Open Full CPAlead Offerwall</span>
-        </button>
+        <p class="text-gray-400 text-sm">Signed in balanced synced to all tasks and offerwalls.</p>
+        
+        <!-- Streak Counter Pill -->
+        <div id="streakBadge" class="hidden inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-xl text-xs text-amber-300 font-semibold mt-1">
+          <i class="fa-solid fa-fire text-amber-400"></i>
+          <span>Daily Streak: <strong id="streakCount">1</strong> Day(s) — +10 Gems Claimed!</span>
+        </div>
+
+        <div>
+          <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Open Full CPAlead Offerwall</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -157,7 +167,7 @@
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
         <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Quick User Lookup & Adjustment</h4>
         <div class="flex space-x-2">
-          <input type="text" id="adminSearchEmail" placeholder="Search user email..." class="flex-grow bg-[#151c2e] border border-[#2a364f] text-white text-xs px-3 py-2 rounded-lg focus:outline-none">
+          <input type="text" id="adminSearchEmail" placeholder="Search username..." class="flex-grow bg-[#151c2e] border border-[#2a364f] text-white text-xs px-3 py-2 rounded-lg focus:outline-none">
           <button id="btnAdminSearch" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
             Search
           </button>
@@ -404,6 +414,38 @@
         document.getElementById('modalCashVal').innerText = cash;
       }
 
+      async function checkDailyStreak(userId, currentGems) {
+        const today = new Date().toISOString().split('T')[0];
+        const lastLoginKey = `streak_date_${userId}`;
+        const streakCountKey = `streak_num_${userId}`;
+
+        const lastLogin = localStorage.getItem(lastLoginKey);
+        let streak = parseInt(localStorage.getItem(streakCountKey) || '1');
+
+        if (lastLogin !== today) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+          if (lastLogin === yesterdayStr) {
+            streak += 1;
+          } else {
+            streak = 1;
+          }
+
+          localStorage.setItem(lastLoginKey, today);
+          localStorage.setItem(streakCountKey, streak);
+
+          const newTotal = currentGems + 10;
+          await saveGemsToSupabase(newTotal);
+          updateGems(newTotal);
+          confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+        }
+
+        document.getElementById('streakCount').innerText = streak;
+        document.getElementById('streakBadge').classList.remove('hidden');
+      }
+
       async function fetchUserGems(userId) {
         if (!supabase) return;
         try {
@@ -416,8 +458,8 @@
             updateGems(data.gems || 0);
             setLoginState(data.username || 'Member', true);
             hideModal('authModal');
+            checkDailyStreak(userId, data.gems || 0);
 
-            // AUTOMATIC ADMIN CHECK FOR USER 'nezu'
             if (data.username && data.username.toLowerCase() === 'nezu') {
               document.getElementById('btnAdmin').classList.remove('hidden');
             } else {
@@ -441,7 +483,6 @@
         }
       }
 
-      // Check active Supabase session on load
       if (supabase) {
         const { data: { session } } = await supabase.auth.getSession();
         if (session && session.user) {
@@ -468,6 +509,7 @@
           authBtn.innerText = "Login / Sign Up";
           authBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
           document.getElementById('btnAdmin').classList.add('hidden');
+          document.getElementById('streakBadge').classList.add('hidden');
           updateGems(0);
           showModal('authModal');
         }
@@ -485,7 +527,6 @@
         box.classList.add('hidden');
       }
 
-      // Converter Logic
       const calcGems = document.getElementById('calcGems');
       const calcCash = document.getElementById('calcCash');
       if (calcGems && calcCash) {
@@ -499,7 +540,6 @@
         });
       }
 
-      // Header Button Actions
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
           if (supabase) supabase.auth.signOut();
@@ -530,7 +570,6 @@
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
       document.getElementById('closeAdmin').addEventListener('click', () => hideModal('adminModal'));
 
-      // Admin User Lookup
       document.getElementById('btnAdminSearch').addEventListener('click', async () => {
         const query = document.getElementById('adminSearchEmail').value.trim();
         const resultBox = document.getElementById('adminSearchResult');
@@ -555,7 +594,6 @@
         }
       });
 
-      // Toggle Auth Mode
       document.getElementById('toggleAuthBtn').addEventListener('click', function() {
         isSignUp = !isSignUp;
         clearError();
@@ -564,7 +602,6 @@
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
-      // AUTHENTICATION FORM
       document.getElementById('authForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         clearError();
@@ -618,7 +655,6 @@
         }
       });
 
-      // Render Direct Offers
       const grid = document.getElementById('offerGrid');
       grid.innerHTML = '';
       directOffers.forEach(o => {
@@ -655,7 +691,6 @@
         }, 300);
       });
 
-      // Cashout Selectors
       function setupRewardSelection(elementId, cost, rewardText) {
         document.getElementById(elementId).addEventListener('click', () => {
           selectedCost = cost;
