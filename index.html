@@ -124,8 +124,16 @@
 
   </main>
 
-  <footer class="max-w-5xl mx-auto w-full px-4 mt-12 text-center text-xs text-gray-500 border-t border-[#2a364f] pt-4">
-    -Nezu
+  <!-- Enhanced Footer -->
+  <footer class="max-w-5xl mx-auto w-full px-4 mt-16 text-center text-xs text-gray-400 border-t border-[#2a364f] pt-6 space-y-2">
+    <div class="flex justify-center items-center space-x-4 text-gray-400 text-xs">
+      <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Secure SSL Active</span>
+      <span>•</span>
+      <span><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Instant Postbacks</span>
+      <span>•</span>
+      <span><i class="fa-solid fa-heart text-purple-400 mr-1"></i> Built by Nezu</span>
+    </div>
+    <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or CPAlead.</p>
   </footer>
 
   <!-- MODAL: CPALEAD FULL OFFERWALL IFRAME -->
@@ -342,6 +350,20 @@
             <p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p>
           </div>
         </div>
+
+        <!-- Locked Coming Soon Option -->
+        <div class="opacity-50 cursor-not-allowed bg-[#0b0f19] border border-[#2a364f] p-3 rounded-xl flex items-center space-x-3 relative">
+          <div class="absolute top-2 right-2 bg-amber-500/20 text-amber-400 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-500/30">
+            Soon
+          </div>
+          <div class="w-10 h-10 rounded-lg bg-gray-700/30 text-gray-400 flex items-center justify-center text-lg font-bold">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-gray-300">Bank Transfer</h4>
+            <p class="text-xs text-gray-500">Coming Soon</p>
+          </div>
+        </div>
       </div>
 
       <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-[#2a364f]">
@@ -540,11 +562,14 @@
         });
       }
 
+      // Logout with Confirmation
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
-          if (supabase) supabase.auth.signOut();
-          currentUser = null;
-          setLoginState('Guest', false);
+          if (confirm("Are you sure you want to log out?")) {
+            if (supabase) supabase.auth.signOut();
+            currentUser = null;
+            setLoginState('Guest', false);
+          }
         } else {
           showModal('authModal');
         }
