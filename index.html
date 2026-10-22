@@ -187,9 +187,9 @@
     </div>
   </div>
 
-  <!-- MODAL: ADMIN PANEL -->
+  <!-- MODAL: EXPANDED ADMIN PANEL -->
   <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
       <button id="closeAdmin" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -204,17 +204,46 @@
         </div>
       </div>
 
+      <!-- User Search & Balance Adjuster -->
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
-        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Quick User Lookup & Adjustment</h4>
+        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">User Lookup & Gem Adjuster</h4>
         <div class="flex space-x-2">
           <input type="text" id="adminSearchEmail" placeholder="Search username..." class="flex-grow bg-[#151c2e] border border-[#2a364f] text-white text-xs px-3 py-2 rounded-lg focus:outline-none">
           <button id="btnAdminSearch" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
             Search
           </button>
         </div>
+        
         <div id="adminSearchResult" class="text-xs text-gray-400 pt-1"></div>
+
+        <!-- Hidden Gem Editor (Appears when user is found) -->
+        <div id="adminGemEditor" class="hidden pt-2 border-t border-[#2a364f] space-y-2">
+          <label class="text-[11px] text-amber-400 font-semibold">Set New Gem Balance:</label>
+          <div class="flex space-x-2">
+            <input type="number" id="adminNewGems" placeholder="New gems amount" class="flex-grow bg-[#151c2e] border border-[#2a364f] text-amber-400 font-bold text-xs px-3 py-2 rounded-lg focus:outline-none">
+            <button id="btnAdminUpdateGems" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
+              Update Balance
+            </button>
+          </div>
+        </div>
       </div>
 
+      <!-- Pending Payout Requests -->
+      <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
+        <div class="flex justify-between items-center">
+          <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Pending Payout Requests</h4>
+          <button id="btnRefreshPayouts" class="text-xs text-purple-400 hover:text-purple-300 flex items-center space-x-1">
+            <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
+
+        <div id="adminPayoutsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+          <p class="text-xs text-gray-500">No payout requests logged yet.</p>
+        </div>
+      </div>
+
+      <!-- System Status -->
       <div class="space-y-2">
         <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Platform Status</h4>
         <div class="grid grid-cols-2 gap-3">
@@ -418,6 +447,7 @@
       let currentTask = null;
       let supabase = null;
       let currentUser = null;
+      let selectedAdminUser = null;
 
       try {
         if (window.supabase) {
@@ -614,6 +644,7 @@
 
       document.getElementById('btnAdmin').addEventListener('click', () => {
         showModal('adminModal');
+        loadPendingPayouts();
       });
       
       document.getElementById('btnHowIDidIt').addEventListener('click', () => {
@@ -632,12 +663,18 @@
       document.getElementById('closeAdmin').addEventListener('click', () => hideModal('adminModal'));
       document.getElementById('closeHow').addEventListener('click', () => hideModal('howModal'));
 
+      // ADMIN: SEARCH USER
       document.getElementById('btnAdminSearch').addEventListener('click', async () => {
         const query = document.getElementById('adminSearchEmail').value.trim();
         const resultBox = document.getElementById('adminSearchResult');
+        const editorBox = document.getElementById('adminGemEditor');
+        
         if (!query) return;
 
         resultBox.innerText = "Searching database...";
+        editorBox.classList.add('hidden');
+        selectedAdminUser = null;
+
         try {
           const { data, error } = await supabase
             .from('profiles')
@@ -647,7 +684,10 @@
 
           if (error) throw error;
           if (data && data.length > 0) {
-            resultBox.innerHTML = `Found user: <strong class="text-white">${data[0].username}</strong> | Gems: <strong class="text-amber-400">${data[0].gems}</strong>`;
+            selectedAdminUser = data[0];
+            resultBox.innerHTML = `Found user: <strong class="text-white">${selectedAdminUser.username}</strong> | Gems: <strong class="text-amber-400">${selectedAdminUser.gems}</strong>`;
+            document.getElementById('adminNewGems').value = selectedAdminUser.gems;
+            editorBox.classList.remove('hidden');
           } else {
             resultBox.innerText = "No user found with that username.";
           }
@@ -655,6 +695,67 @@
           resultBox.innerText = "Error searching database.";
         }
       });
+
+      // ADMIN: UPDATE USER GEMS DIRECTLY
+      document.getElementById('btnAdminUpdateGems').addEventListener('click', async () => {
+        if (!selectedAdminUser) return;
+        const newGemsVal = parseInt(document.getElementById('adminNewGems').value);
+        if (isNaN(newGemsVal)) return alert("Please enter a valid gem number.");
+
+        try {
+          const { error } = await supabase
+            .from('profiles')
+            .update({ gems: newGemsVal })
+            .eq('id', selectedAdminUser.id);
+
+          if (error) throw error;
+
+          alert(`✅ Successfully updated ${selectedAdminUser.username}'s gems to ${newGemsVal}!`);
+          selectedAdminUser.gems = newGemsVal;
+          document.getElementById('adminSearchResult').innerHTML = `Found user: <strong class="text-white">${selectedAdminUser.username}</strong> | Gems: <strong class="text-amber-400">${selectedAdminUser.gems}</strong>`;
+
+          // Refresh logged-in user balance if adjusting own account
+          if (currentUser && selectedAdminUser.id === currentUser.id) {
+            updateGems(newGemsVal);
+          }
+        } catch(err) {
+          alert("Error updating user gems: " + err.message);
+        }
+      });
+
+      // ADMIN: PAYOUT REQUESTS LIST LOGIC
+      function loadPendingPayouts() {
+        const listContainer = document.getElementById('adminPayoutsList');
+        const pendingPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
+
+        if (pendingPayouts.length === 0) {
+          listContainer.innerHTML = '<p class="text-xs text-gray-500">No payout requests logged yet.</p>';
+          return;
+        }
+
+        listContainer.innerHTML = '';
+        pendingPayouts.forEach((p, idx) => {
+          const row = document.createElement('div');
+          row.className = "bg-[#151c2e] p-2.5 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
+          row.innerHTML = `
+            <div>
+              <p class="font-bold text-white">${p.reward} <span class="text-gray-400 font-normal">(${p.user})</span></p>
+              <p class="text-[11px] text-emerald-400 font-mono">${p.destination}</p>
+            </div>
+            <button class="btnApprovePayout bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[11px] transition">
+              Mark Paid
+            </button>
+          `;
+          row.querySelector('.btnApprovePayout').addEventListener('click', () => {
+            pendingPayouts.splice(idx, 1);
+            localStorage.setItem('gem_forge_payouts', JSON.stringify(pendingPayouts));
+            loadPendingPayouts();
+          });
+          listContainer.appendChild(row);
+        });
+      }
+
+      document.getElementById('btnRefreshPayouts').addEventListener('click', loadPendingPayouts);
 
       document.getElementById('toggleAuthBtn').addEventListener('click', function() {
         isSignUp = !isSignUp;
@@ -776,6 +877,16 @@
         const newTotal = gems - selectedCost;
         updateGems(newTotal);
         await saveGemsToSupabase(newTotal);
+
+        // LOG PAYOUT TO ADMIN QUEUE
+        const existingPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
+        existingPayouts.push({
+          user: currentUser ? (currentUser.user_metadata?.username || currentUser.email) : 'User',
+          reward: selectedRewardName,
+          destination: input,
+          date: new Date().toLocaleTimeString()
+        });
+        localStorage.setItem('gem_forge_payouts', JSON.stringify(existingPayouts));
 
         alert(`🎉 Payout Request Submitted!\n\nReward: ${selectedRewardName}\nDestination: ${input}\n\nYour request has been logged!`);
         document.getElementById('payoutDetail').value = '';
