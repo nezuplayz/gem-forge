@@ -74,7 +74,7 @@
         <div>
           <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
             <i class="fa-solid fa-layer-group"></i>
-            <span>Open Offerwall</span>
+            <span>Open Full CPAlead Offerwall</span>
           </button>
         </div>
       </div>
@@ -112,7 +112,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Verified Offers</span>
+          <span>Verified CPA Offers</span>
         </h2>
         <span class="text-xs text-gray-400 font-medium">Automatic Crediting</span>
       </div>
@@ -137,7 +137,7 @@
         How I Did It?
       </button>
     </div>
-    <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or offer networks.</p>
+    <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or CPAlead.</p>
   </footer>
 
   <!-- MODAL: PRIVACY POLICY -->
@@ -154,7 +154,7 @@
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
         <p><strong>Information We Collect:</strong> Gem Forge collects basic account information (email address and username) required for account authentication and user reward balance tracking.</p>
-        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks to present task opportunities. Completing an offer may involve sharing interaction data directly with those offer providers.</p>
+        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks (such as CPAlead) to present task opportunities. Completing an offer may involve sharing interaction data directly with those offer providers.</p>
         <p><strong>Data Usage & Protection:</strong> Your personal data is used solely for managing your reward balance, tracking daily streak progress, and processing requested payouts. We do not sell or lease user data to third parties.</p>
       </div>
     </div>
@@ -176,7 +176,7 @@
         <p><strong>1. Account Creation & Eligibility:</strong> By creating an account on Gem Forge, you agree to provide accurate registration information and maintain a single account.</p>
         <p><strong>2. Fair Usage & Fraud Policy:</strong> VPNs, proxies, automated bots, multi-accounting, or fraudulent offer completions are strictly prohibited. Accounts engaging in suspicious activity are subject to balance forfeitures or bans.</p>
         <p><strong>3. Reward Redemption & Conversions:</strong> Gem values (1,000 Gems = £1.00 GBP) are earned through verified advertiser completions. Rewards are subject to manual fraud review prior to fulfillment.</p>
-        <p><strong>4. Disclaimer:</strong> Gem Forge is an independent platform and is not affiliated with, endorsed by, or partnered with Roblox Corporation or gift card brands.</p>
+        <p><strong>4. Disclaimer:</strong> Gem Forge is an independent platform and is not affiliated with, endorsed by, or partnered with Roblox Corporation or CPAlead.</p>
       </div>
     </div>
   </div>
@@ -203,13 +203,13 @@
     </div>
   </div>
 
-  <!-- MODAL: OFFERWALL IFRAME -->
+  <!-- MODAL: CPALEAD FULL OFFERWALL IFRAME -->
   <div id="taskModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl h-[85vh] rounded-2xl relative flex flex-col shadow-2xl overflow-hidden">
       <div class="p-4 border-b border-[#2a364f] flex justify-between items-center bg-[#0b0f19]">
         <h3 class="text-base font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-layer-group text-purple-400"></i>
-          <span>Live Offerwall</span>
+          <span>CPAlead Live Offerwall</span>
         </h3>
         <button id="closeTask" class="text-gray-400 hover:text-white text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -287,7 +287,7 @@
       </div>
       <div class="space-y-3 pt-1">
         <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
-          <span>Launch Offer</span>
+          <span>Launch Offer in CPAlead</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
       </div>
@@ -400,8 +400,8 @@
 
       function getDynamicLockerUrl() {
         const subId = currentUser ? currentUser.id : 'guest';
-        // Once approved by Torox, replace this placeholder URL with your Torox offerwall link:
-        return `https://offerwall.torox.io/affiliate?publisher_id=YOUR_ID&user_id=${subId}`;
+        // Active CPAlead content locker URL with subid tracking
+        return `https://www.fastsvr.com/unlock/pQ251ivJ?subid=${subId}`;
       }
 
       function updateGems(val) {
