@@ -63,7 +63,7 @@
           🔒 Locked - Please Sign In
         </span>
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Verified Tasks, Earn Gems</h1>
-        <p class="text-gray-400 text-sm">Signed in balanced synced to all tasks and offerwalls.</p>
+        <p class="text-gray-400 text-sm">Signed in balance synced to all tasks and offerwalls.</p>
         
         <!-- Streak Counter Pill -->
         <div id="streakBadge" class="hidden inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-xl text-xs text-amber-300 font-semibold mt-1">
@@ -74,7 +74,7 @@
         <div>
           <button id="btnOffers" class="mt-3 bg-gradient-to-r from-amber-500 to-purple-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition flex items-center space-x-2">
             <i class="fa-solid fa-layer-group"></i>
-            <span>Open Full CPAlead Offerwall</span>
+            <span>Open Offerwall</span>
           </button>
         </div>
       </div>
@@ -112,7 +112,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Verified CPA Offers</span>
+          <span>Verified Offers</span>
         </h2>
         <span class="text-xs text-gray-400 font-medium">Automatic Crediting</span>
       </div>
@@ -124,21 +124,62 @@
 
   </main>
 
-  <!-- Enhanced Footer -->
+  <!-- Enhanced Footer with Legal Links -->
   <footer class="max-w-5xl mx-auto w-full px-4 mt-16 text-center text-xs text-gray-400 border-t border-[#2a364f] pt-6 space-y-3">
     <div class="flex flex-wrap justify-center items-center gap-3 text-gray-400 text-xs">
+      <button id="btnPrivacy" class="hover:text-amber-300 transition">Privacy Policy</button>
+      <span>•</span>
+      <button id="btnTerms" class="hover:text-amber-300 transition">Terms of Service</button>
+      <span>•</span>
       <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Secure SSL Active</span>
-      <span>•</span>
-      <span><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Instant Postbacks</span>
-      <span>•</span>
-      <span><i class="fa-solid fa-heart text-purple-400 mr-1"></i> Built by Nezu</span>
       <span>•</span>
       <button id="btnHowIDidIt" class="text-amber-400 hover:text-amber-300 font-bold underline transition">
         How I Did It?
       </button>
     </div>
-    <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or CPAlead.</p>
+    <p class="text-gray-500">© 2026 Gem Forge. All rights reserved. Not affiliated with Roblox Corporation or offer networks.</p>
   </footer>
+
+  <!-- MODAL: PRIVACY POLICY -->
+  <div id="privacyModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[80vh] overflow-y-auto text-left">
+      <button id="closePrivacy" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Privacy Policy</h3>
+      </div>
+      <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
+        <p><strong>Information We Collect:</strong> Gem Forge collects basic account information (email address and username) required for account authentication and user reward balance tracking.</p>
+        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks to present task opportunities. Completing an offer may involve sharing interaction data directly with those offer providers.</p>
+        <p><strong>Data Usage & Protection:</strong> Your personal data is used solely for managing your reward balance, tracking daily streak progress, and processing requested payouts. We do not sell or lease user data to third parties.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TERMS OF SERVICE -->
+  <div id="termsModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[80vh] overflow-y-auto text-left">
+      <button id="closeTerms" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30">
+          <i class="fa-solid fa-file-contract"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Terms of Service</h3>
+      </div>
+      <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
+        <p><strong>1. Account Creation & Eligibility:</strong> By creating an account on Gem Forge, you agree to provide accurate registration information and maintain a single account.</p>
+        <p><strong>2. Fair Usage & Fraud Policy:</strong> VPNs, proxies, automated bots, multi-accounting, or fraudulent offer completions are strictly prohibited. Accounts engaging in suspicious activity are subject to balance forfeitures or bans.</p>
+        <p><strong>3. Reward Redemption & Conversions:</strong> Gem values (1,000 Gems = £1.00 GBP) are earned through verified advertiser completions. Rewards are subject to manual fraud review prior to fulfillment.</p>
+        <p><strong>4. Disclaimer:</strong> Gem Forge is an independent platform and is not affiliated with, endorsed by, or partnered with Roblox Corporation or gift card brands.</p>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: HOW I DID IT -->
   <div id="howModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
@@ -146,7 +187,6 @@
       <button id="closeHow" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
-
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30">
           <i class="fa-solid fa-code"></i>
@@ -156,31 +196,25 @@
           <p class="text-xs text-gray-400">a quick 2-week mess</p>
         </div>
       </div>
-
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
-        <p>
-          ngl this took me like 2 solid weeks of messing around with tailwind and breaking supabase database stuff at 2am until it actually worked properly.
-        </p>
-        <p>
-          strung together HTML, JS, and some edge function postbacks so task rewards credit automatically. keeping it short cause my college assignments are literally piled up to the roof right now and i need to go finish them. enjoy the site!
-        </p>
+        <p>ngl this took me like 2 solid weeks of messing around with tailwind and breaking supabase database stuff at 2am until it actually worked properly.</p>
+        <p>strung together HTML, JS, and some edge function postbacks so task rewards credit automatically. keeping it short cause my college assignments are literally piled up to the roof right now and i need to go finish them. enjoy the site!</p>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: CPALEAD FULL OFFERWALL IFRAME -->
+  <!-- MODAL: OFFERWALL IFRAME -->
   <div id="taskModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-3">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl h-[85vh] rounded-2xl relative flex flex-col shadow-2xl overflow-hidden">
       <div class="p-4 border-b border-[#2a364f] flex justify-between items-center bg-[#0b0f19]">
         <h3 class="text-base font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-layer-group text-purple-400"></i>
-          <span>CPAlead Live Offerwall</span>
+          <span>Live Offerwall</span>
         </h3>
         <button id="closeTask" class="text-gray-400 hover:text-white text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-
       <div class="flex-grow w-full bg-white relative">
         <iframe id="offerwallIframe" src="" class="w-full h-full border-none"></iframe>
       </div>
@@ -189,46 +223,34 @@
 
   <!-- MODAL: EXPANDED ADMIN PANEL -->
   <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto text-left">
       <button id="closeAdmin" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
-
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30">
           <i class="fa-solid fa-shield-halved"></i>
         </div>
         <div>
           <h3 class="text-lg font-bold text-white">Admin Dashboard</h3>
-          <p class="text-xs text-amber-400 font-semibold">Logged in as Administrator (nezu)</p>
+          <p class="text-xs text-amber-400 font-semibold">Logged in as Administrator</p>
         </div>
       </div>
-
-      <!-- User Search & Balance Adjuster -->
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
         <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">User Lookup & Gem Adjuster</h4>
         <div class="flex space-x-2">
           <input type="text" id="adminSearchEmail" placeholder="Search username..." class="flex-grow bg-[#151c2e] border border-[#2a364f] text-white text-xs px-3 py-2 rounded-lg focus:outline-none">
-          <button id="btnAdminSearch" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
-            Search
-          </button>
+          <button id="btnAdminSearch" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">Search</button>
         </div>
-        
         <div id="adminSearchResult" class="text-xs text-gray-400 pt-1"></div>
-
-        <!-- Hidden Gem Editor (Appears when user is found) -->
         <div id="adminGemEditor" class="hidden pt-2 border-t border-[#2a364f] space-y-2">
           <label class="text-[11px] text-amber-400 font-semibold">Set New Gem Balance:</label>
           <div class="flex space-x-2">
             <input type="number" id="adminNewGems" placeholder="New gems amount" class="flex-grow bg-[#151c2e] border border-[#2a364f] text-amber-400 font-bold text-xs px-3 py-2 rounded-lg focus:outline-none">
-            <button id="btnAdminUpdateGems" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">
-              Update Balance
-            </button>
+            <button id="btnAdminUpdateGems" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition">Update Balance</button>
           </div>
         </div>
       </div>
-
-      <!-- Pending Payout Requests -->
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
         <div class="flex justify-between items-center">
           <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Pending Payout Requests</h4>
@@ -237,24 +259,8 @@
             <span>Refresh</span>
           </button>
         </div>
-
         <div id="adminPayoutsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
           <p class="text-xs text-gray-500">No payout requests logged yet.</p>
-        </div>
-      </div>
-
-      <!-- System Status -->
-      <div class="space-y-2">
-        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Platform Status</h4>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-[#0b0f19] p-3 rounded-xl border border-[#2a364f]">
-            <p class="text-[11px] text-gray-400">Postback Status</p>
-            <p class="text-xs font-bold text-emerald-400 mt-0.5"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active (Edge Function)</p>
-          </div>
-          <div class="bg-[#0b0f19] p-3 rounded-xl border border-[#2a364f]">
-            <p class="text-[11px] text-gray-400">Database Connection</p>
-            <p class="text-xs font-bold text-amber-400 mt-0.5"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Connected to Supabase</p>
-          </div>
         </div>
       </div>
     </div>
@@ -262,11 +268,10 @@
 
   <!-- MODAL: TASK DETAIL -->
   <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
       <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
-
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30">
           <i class="fa-solid fa-shield-halved"></i>
@@ -276,75 +281,54 @@
           <p id="detailCategory" class="text-xs text-amber-400 font-semibold"></p>
         </div>
       </div>
-
       <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
         <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions:</p>
         <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed"></p>
       </div>
-
       <div class="space-y-3 pt-1">
         <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
-          <span>Launch Offer in CPAlead</span>
+          <span>Launch Offer</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
-
-        <div id="trackingNotice" class="bg-purple-950/40 border border-purple-500/30 rounded-xl p-3 text-center space-y-1">
-          <p class="text-xs font-bold text-purple-300 flex items-center justify-center space-x-1.5">
-            <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
-            <span>Automatic Crediting Active</span>
-          </p>
-          <p class="text-[11px] text-gray-400">Complete the offer instructions in the opened tab. Gems credit automatically upon advertiser verification.</p>
-        </div>
       </div>
     </div>
   </div>
 
   <!-- MODAL: AUTHENTICATION -->
   <div id="authModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
       <div class="text-center space-y-1">
         <h3 id="authTitle" class="text-xl font-bold text-white">Sign In to Gem Forge</h3>
         <p id="authSubtitle" class="text-xs text-gray-400">Get +10 bonus gems on account setup!</p>
       </div>
-
       <div id="authErrorMsg" class="hidden bg-red-500/20 border border-red-500/50 text-red-300 text-xs p-2.5 rounded-lg text-center"></div>
-
       <form id="authForm" class="space-y-3">
         <div id="usernameContainer" class="hidden space-y-1">
           <label class="text-xs text-gray-400">Username</label>
           <input type="text" id="authUsername" placeholder="Enter username" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
-
         <div class="space-y-1">
           <label class="text-xs text-gray-400">Email Address</label>
           <input type="email" id="authEmail" required placeholder="name@example.com" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
-
         <div class="space-y-1">
           <label class="text-xs text-gray-400">Password</label>
           <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         </div>
-
-        <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2.5 rounded-lg shadow-md hover:brightness-110 transition text-sm mt-2">
-          Sign In
-        </button>
+        <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2.5 rounded-lg shadow-md hover:brightness-110 transition text-sm mt-2">Sign In</button>
       </form>
-
       <div class="text-center pt-2 border-t border-[#2a364f]">
-        <button type="button" id="toggleAuthBtn" class="text-xs text-purple-400 hover:text-purple-300">
-          Don't have an account? Sign Up
-        </button>
+        <button type="button" id="toggleAuthBtn" class="text-xs text-purple-400 hover:text-purple-300">Don't have an account? Sign Up</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL: WITHDRAW -->
   <div id="withdrawModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl">
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl text-left">
       <button id="closeWithdraw" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
-
       <div class="space-y-1">
         <h3 class="text-xl font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-wallet text-emerald-400"></i>
@@ -352,7 +336,6 @@
         </h3>
         <p class="text-xs text-gray-400">Select a payout method or gift card to redeem your gems.</p>
       </div>
-
       <div class="bg-[#0b0f19] p-3 rounded-xl border border-emerald-500/30 flex justify-between items-center">
         <span class="text-xs text-gray-300">Your Balance:</span>
         <span class="font-bold text-amber-400 text-sm flex items-center space-x-1">
@@ -360,79 +343,28 @@
           <span id="modalGemCount">0</span> Gems (~£<span id="modalCashVal">0.00</span>)
         </span>
       </div>
-
       <div class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
         <div id="payoutRobux" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
-          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-solid fa-cube"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Robux</h4>
-            <p class="text-xs text-gray-400">40 Robux (500 Gems)</p>
-          </div>
+          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-cube"></i></div>
+          <div><h4 class="font-bold text-sm text-white">Robux</h4><p class="text-xs text-gray-400">40 Robux (500 Gems)</p></div>
         </div>
-
         <div id="payoutAmazon2" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
-          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-brands fa-amazon"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Amazon Card</h4>
-            <p class="text-xs text-gray-400">£2.00 (2,000 Gems)</p>
-          </div>
+          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold"><i class="fa-brands fa-amazon"></i></div>
+          <div><h4 class="font-bold text-sm text-white">Amazon Card</h4><p class="text-xs text-gray-400">£2.00 (2,000 Gems)</p></div>
         </div>
-
-        <div id="payoutAmazon5" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-amber-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
-          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-brands fa-amazon"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Amazon Card</h4>
-            <p class="text-xs text-gray-400">£5.00 (5,000 Gems)</p>
-          </div>
-        </div>
-
         <div id="payoutPaypal" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-blue-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
-          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-brands fa-paypal"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">PayPal Cash</h4>
-            <p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p>
-          </div>
+          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold"><i class="fa-brands fa-paypal"></i></div>
+          <div><h4 class="font-bold text-sm text-white">PayPal Cash</h4><p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p></div>
         </div>
-
         <div id="payoutCrypto" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-purple-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
-          <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-solid fa-coins"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-white">Litecoin</h4>
-            <p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p>
-          </div>
-        </div>
-
-        <!-- Locked Coming Soon Option -->
-        <div class="opacity-50 cursor-not-allowed bg-[#0b0f19] border border-[#2a364f] p-3 rounded-xl flex items-center space-x-3 relative">
-          <div class="absolute top-2 right-2 bg-amber-500/20 text-amber-400 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-500/30">
-            Soon
-          </div>
-          <div class="w-10 h-10 rounded-lg bg-gray-700/30 text-gray-400 flex items-center justify-center text-lg font-bold">
-            <i class="fa-solid fa-building-columns"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-gray-300">Bank Transfer</h4>
-            <p class="text-xs text-gray-500">Coming Soon</p>
-          </div>
+          <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-coins"></i></div>
+          <div><h4 class="font-bold text-sm text-white">Litecoin</h4><p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p></div>
         </div>
       </div>
-
       <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-[#2a364f]">
         <p id="selectedRewardText" class="text-xs font-semibold text-emerald-400"></p>
         <input type="text" id="payoutDetail" placeholder="Enter Roblox Username, Email, or Wallet..." class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
-        <button id="btnSubmitPayout" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">
-          Submit Payout Request
-        </button>
+        <button id="btnSubmitPayout" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">Submit Payout Request</button>
       </div>
     </div>
   </div>
@@ -461,32 +393,15 @@
       }
 
       const directOffers = [
-        { 
-          id: 1, 
-          title: "Featured Mobile App Task", 
-          reward: 150, 
-          typeTag: "Top Rated", 
-          desc: "Complete the installation and tutorial steps on your mobile phone to earn gems automatically." 
-        },
-        { 
-          id: 2, 
-          title: "Quick Survey Offer", 
-          reward: 100, 
-          typeTag: "Easy Task", 
-          desc: "Answer the short opinion survey through the CPAlead link to receive gems." 
-        },
-        { 
-          id: 3, 
-          title: "App Exploration Offer", 
-          reward: 120, 
-          typeTag: "Popular", 
-          desc: "Download and explore the featured app for 2 minutes to trigger automatic crediting." 
-        }
+        { id: 1, title: "Featured Mobile App Task", reward: 150, typeTag: "Top Rated", desc: "Complete installation and tutorial steps on your mobile phone to earn gems." },
+        { id: 2, title: "Quick Survey Offer", reward: 100, typeTag: "Easy Task", desc: "Answer the short opinion survey link to receive gems." },
+        { id: 3, title: "App Exploration Offer", reward: 120, typeTag: "Popular", desc: "Download and explore the featured app for 2 minutes." }
       ];
 
       function getDynamicLockerUrl() {
         const subId = currentUser ? currentUser.id : 'guest';
-        return `https://www.fastsvr.com/unlock/pQ251ivJ?subid=${subId}`;
+        // Once approved by Torox, replace this placeholder URL with your Torox offerwall link:
+        return `https://offerwall.torox.io/affiliate?publisher_id=YOUR_ID&user_id=${subId}`;
       }
 
       function updateGems(val) {
@@ -606,25 +521,30 @@
         box.innerText = msg;
         box.classList.remove('hidden');
       }
-      function clearError() {
-        const box = document.getElementById('authErrorMsg');
-        box.classList.add('hidden');
-      }
+      function clearError() { document.getElementById('authErrorMsg').classList.add('hidden'); }
+
+      // Modals triggers setup
+      document.getElementById('btnPrivacy').addEventListener('click', () => showModal('privacyModal'));
+      document.getElementById('btnTerms').addEventListener('click', () => showModal('termsModal'));
+      document.getElementById('closePrivacy').addEventListener('click', () => hideModal('privacyModal'));
+      document.getElementById('closeTerms').addEventListener('click', () => hideModal('termsModal'));
+
+      document.getElementById('btnHowIDidIt').addEventListener('click', () => showModal('howModal'));
+      document.getElementById('closeHow').addEventListener('click', () => hideModal('howModal'));
 
       const calcGems = document.getElementById('calcGems');
       const calcCash = document.getElementById('calcCash');
       if (calcGems && calcCash) {
-        calcGems.addEventListener('input', function() {
+        calcGems.addEventListener('input', () => {
           const val = parseFloat(calcGems.value) || 0;
           calcCash.value = (val / 1000).toFixed(2);
         });
-        calcCash.addEventListener('input', function() {
+        calcCash.addEventListener('input', () => {
           const val = parseFloat(calcCash.value) || 0;
           calcGems.value = Math.round(val * 1000);
         });
       }
 
-      // Logout with Confirmation
       document.getElementById('btnAuth').addEventListener('click', () => {
         if (isLoggedIn) {
           if (confirm("Are you sure you want to log out?")) {
@@ -646,10 +566,6 @@
         showModal('adminModal');
         loadPendingPayouts();
       });
-      
-      document.getElementById('btnHowIDidIt').addEventListener('click', () => {
-        showModal('howModal');
-      });
 
       document.getElementById('btnOffers').addEventListener('click', () => {
         if (!isLoggedIn) return showModal('authModal');
@@ -661,14 +577,12 @@
       document.getElementById('closeDetail').addEventListener('click', () => hideModal('detailModal'));
       document.getElementById('closeWithdraw').addEventListener('click', () => hideModal('withdrawModal'));
       document.getElementById('closeAdmin').addEventListener('click', () => hideModal('adminModal'));
-      document.getElementById('closeHow').addEventListener('click', () => hideModal('howModal'));
 
-      // ADMIN: SEARCH USER
+      // ADMIN SEARCH & PAYOUTS
       document.getElementById('btnAdminSearch').addEventListener('click', async () => {
         const query = document.getElementById('adminSearchEmail').value.trim();
         const resultBox = document.getElementById('adminSearchResult');
         const editorBox = document.getElementById('adminGemEditor');
-        
         if (!query) return;
 
         resultBox.innerText = "Searching database...";
@@ -676,77 +590,47 @@
         selectedAdminUser = null;
 
         try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('id, username, gems')
-            .ilike('username', `%${query}%`)
-            .limit(1);
-
-          if (error) throw error;
+          const { data } = await supabase.from('profiles').select('id, username, gems').ilike('username', `%${query}%`).limit(1);
           if (data && data.length > 0) {
             selectedAdminUser = data[0];
-            resultBox.innerHTML = `Found user: <strong class="text-white">${selectedAdminUser.username}</strong> | Gems: <strong class="text-amber-400">${selectedAdminUser.gems}</strong>`;
+            resultBox.innerHTML = `Found: <strong class="text-white">${selectedAdminUser.username}</strong> | Gems: <strong class="text-amber-400">${selectedAdminUser.gems}</strong>`;
             document.getElementById('adminNewGems').value = selectedAdminUser.gems;
             editorBox.classList.remove('hidden');
           } else {
-            resultBox.innerText = "No user found with that username.";
+            resultBox.innerText = "No user found.";
           }
         } catch(err) {
           resultBox.innerText = "Error searching database.";
         }
       });
 
-      // ADMIN: UPDATE USER GEMS DIRECTLY
       document.getElementById('btnAdminUpdateGems').addEventListener('click', async () => {
         if (!selectedAdminUser) return;
         const newGemsVal = parseInt(document.getElementById('adminNewGems').value);
-        if (isNaN(newGemsVal)) return alert("Please enter a valid gem number.");
-
+        if (isNaN(newGemsVal)) return alert("Enter a valid number.");
         try {
-          const { error } = await supabase
-            .from('profiles')
-            .update({ gems: newGemsVal })
-            .eq('id', selectedAdminUser.id);
-
-          if (error) throw error;
-
-          alert(`✅ Successfully updated ${selectedAdminUser.username}'s gems to ${newGemsVal}!`);
+          await supabase.from('profiles').update({ gems: newGemsVal }).eq('id', selectedAdminUser.id);
+          alert(`Successfully updated balance to ${newGemsVal}!`);
           selectedAdminUser.gems = newGemsVal;
-          document.getElementById('adminSearchResult').innerHTML = `Found user: <strong class="text-white">${selectedAdminUser.username}</strong> | Gems: <strong class="text-amber-400">${selectedAdminUser.gems}</strong>`;
-
-          // Refresh logged-in user balance if adjusting own account
-          if (currentUser && selectedAdminUser.id === currentUser.id) {
-            updateGems(newGemsVal);
-          }
+          if (currentUser && selectedAdminUser.id === currentUser.id) updateGems(newGemsVal);
         } catch(err) {
-          alert("Error updating user gems: " + err.message);
+          alert("Error updating gems.");
         }
       });
 
-      // ADMIN: PAYOUT REQUESTS LIST LOGIC
       function loadPendingPayouts() {
         const listContainer = document.getElementById('adminPayoutsList');
         const pendingPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
-
         if (pendingPayouts.length === 0) {
           listContainer.innerHTML = '<p class="text-xs text-gray-500">No payout requests logged yet.</p>';
           return;
         }
-
         listContainer.innerHTML = '';
         pendingPayouts.forEach((p, idx) => {
           const row = document.createElement('div');
           row.className = "bg-[#151c2e] p-2.5 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
-          row.innerHTML = `
-            <div>
-              <p class="font-bold text-white">${p.reward} <span class="text-gray-400 font-normal">(${p.user})</span></p>
-              <p class="text-[11px] text-emerald-400 font-mono">${p.destination}</p>
-            </div>
-            <button class="btnApprovePayout bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[11px] transition">
-              Mark Paid
-            </button>
-          `;
-          row.querySelector('.btnApprovePayout').addEventListener('click', () => {
+          row.innerHTML = `<div><p class="font-bold text-white">${p.reward} (${p.user})</p><p class="text-[11px] text-emerald-400 font-mono">${p.destination}</p></div><button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[11px]">Mark Paid</button>`;
+          row.querySelector('button').addEventListener('click', () => {
             pendingPayouts.splice(idx, 1);
             localStorage.setItem('gem_forge_payouts', JSON.stringify(pendingPayouts));
             loadPendingPayouts();
@@ -757,7 +641,7 @@
 
       document.getElementById('btnRefreshPayouts').addEventListener('click', loadPendingPayouts);
 
-      document.getElementById('toggleAuthBtn').addEventListener('click', function() {
+      document.getElementById('toggleAuthBtn').addEventListener('click', () => {
         isSignUp = !isSignUp;
         clearError();
         document.getElementById('authTitle').innerText = isSignUp ? "Create Account" : "Sign In";
@@ -773,21 +657,12 @@
         const usernameInput = document.getElementById('authUsername').value.trim();
         const displayName = usernameInput || email.split('@')[0];
 
-        if (!supabase) {
-          showError("Connection error: Unable to reach authentication server.");
-          return;
-        }
+        if (!supabase) return showError("Connection error.");
 
         try {
           if (isSignUp) {
-            const { data, error } = await supabase.auth.signUp({
-              email: email,
-              password: pass,
-              options: { data: { username: displayName } }
-            });
-
+            const { data, error } = await supabase.auth.signUp({ email, password: pass, options: { data: { username: displayName } } });
             if (error) throw error;
-
             if (data.user) {
               currentUser = data.user;
               await saveGemsToSupabase(10);
@@ -798,13 +673,8 @@
               hideModal('authModal');
             }
           } else {
-            const { data, error } = await supabase.auth.signInWithPassword({
-              email: email,
-              password: pass
-            });
-
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
             if (error) throw error;
-
             if (data.user) {
               currentUser = data.user;
               await fetchUserGems(currentUser.id);
@@ -814,7 +684,7 @@
             }
           }
         } catch(err) {
-          showError(err.message || "Invalid email or password.");
+          showError(err.message || "Invalid authentication details.");
         }
       });
 
@@ -822,7 +692,7 @@
       grid.innerHTML = '';
       directOffers.forEach(o => {
         const card = document.createElement('div');
-        card.className = "bg-[#151c2e] border border-[#2a364f] p-5 rounded-xl space-y-3 flex flex-col justify-between";
+        card.className = "bg-[#151c2e] border border-[#2a364f] p-5 rounded-xl space-y-3 flex flex-col justify-between text-left";
         card.innerHTML = `
           <div>
             <div class="flex justify-between items-start">
@@ -832,13 +702,12 @@
             <h3 class="font-bold text-white mt-2">${o.title}</h3>
             <p class="text-xs text-gray-400 mt-1">${o.desc}</p>
           </div>
-          <button class="btnViewTask w-full bg-[#0b0f19] hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
+          <button class="w-full bg-[#0b0f19] hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 font-semibold py-2 rounded-lg text-sm transition">
             View Instructions
           </button>
         `;
-        card.querySelector('.btnViewTask').addEventListener('click', () => {
+        card.querySelector('button').addEventListener('click', () => {
           if (!isLoggedIn) return showModal('authModal');
-          currentTask = o;
           document.getElementById('detailTitle').innerText = o.title;
           document.getElementById('detailCategory').innerText = `${o.typeTag} • Reward: +${o.reward} Gems`;
           document.getElementById('detailDesc').innerText = o.desc;
@@ -846,12 +715,6 @@
           showModal('detailModal');
         });
         grid.appendChild(card);
-      });
-
-      document.getElementById('startTaskBtn').addEventListener('click', function() {
-        setTimeout(() => {
-          alert("ℹ️ Offer opened in a new tab! Gems will credit automatically upon advertiser verification.");
-        }, 300);
       });
 
       function setupRewardSelection(elementId, cost, rewardText) {
@@ -865,20 +728,18 @@
 
       setupRewardSelection('payoutRobux', 500, '40 Robux (500 Gems)');
       setupRewardSelection('payoutAmazon2', 2000, '£2.00 Amazon Gift Card (2,000 Gems)');
-      setupRewardSelection('payoutAmazon5', 5000, '£5.00 Amazon Gift Card (5,000 Gems)');
       setupRewardSelection('payoutPaypal', 1000, '£1.00 PayPal Cash (1,000 Gems)');
-      setupRewardSelection('payoutCrypto', 1000, '£1.00 Litecoin / Crypto (1,000 Gems)');
+      setupRewardSelection('payoutCrypto', 1000, '£1.00 Litecoin (1,000 Gems)');
 
       document.getElementById('btnSubmitPayout').addEventListener('click', async () => {
         const input = document.getElementById('payoutDetail').value.trim();
         if (!input) return alert('Please enter your account email or username.');
-        if (gems < selectedCost) return alert('Not enough gems for this cashout.');
+        if (gems < selectedCost) return alert('Not enough gems.');
         
         const newTotal = gems - selectedCost;
         updateGems(newTotal);
         await saveGemsToSupabase(newTotal);
 
-        // LOG PAYOUT TO ADMIN QUEUE
         const existingPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
         existingPayouts.push({
           user: currentUser ? (currentUser.user_metadata?.username || currentUser.email) : 'User',
@@ -888,7 +749,7 @@
         });
         localStorage.setItem('gem_forge_payouts', JSON.stringify(existingPayouts));
 
-        alert(`🎉 Payout Request Submitted!\n\nReward: ${selectedRewardName}\nDestination: ${input}\n\nYour request has been logged!`);
+        alert(`🎉 Payout Request Submitted!\n\nReward: ${selectedRewardName}`);
         document.getElementById('payoutDetail').value = '';
         document.getElementById('payoutForm').classList.add('hidden');
         hideModal('withdrawModal');
