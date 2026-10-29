@@ -397,7 +397,6 @@
           const timeLeft = twentyFourHours - elapsed;
 
           if (timeLeft <= 0) {
-            // Ready to claim next streak
             let streak = parseInt(localStorage.getItem(streakCountKey) || '1') + 1;
             localStorage.setItem(streakCountKey, streak);
             localStorage.setItem(lastLoginKey, now.toString());
@@ -531,6 +530,7 @@
 
       document.getElementById('btnWithdraw').addEventListener('click', () => {
         if (!isLoggedIn) return showModal('authModal');
+        loadUserPayoutHistory();
         showModal('withdrawModal');
       });
 
@@ -592,20 +592,27 @@
 
       function loadPendingPayouts() {
         const listContainer = document.getElementById('adminPayoutsList');
-        const pendingPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
+        const allPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
+        // Only show pending payouts in the admin action queue
+        const pendingPayouts = allPayouts.filter(p => p.status === 'Pending');
+
         if (pendingPayouts.length === 0) {
-          listContainer.innerHTML = '<p class="text-xs text-gray-500">No payout requests logged yet.</p>';
+          listContainer.innerHTML = '<p class="text-xs text-gray-500">No pending payout requests logged.</p>';
           return;
         }
+
         listContainer.innerHTML = '';
-        pendingPayouts.forEach((p, idx) => {
+        pendingPayouts.forEach((p) => {
           const row = document.createElement('div');
           row.className = "bg-[#151c2e] p-2.5 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
           row.innerHTML = `<div><p class="font-bold text-white">${p.reward} (${p.user})</p><p class="text-[11px] text-emerald-400 font-mono">${p.destination}</p></div><button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[11px]">Mark Paid</button>`;
+          
           row.querySelector('button').addEventListener('click', () => {
-            pendingPayouts.splice(idx, 1);
-            localStorage.setItem('gem_forge_payouts', JSON.stringify(pendingPayouts));
+            // Find and mark as Paid in main storage instead of deleting
+            p.status = 'Paid';
+            localStorage.setItem('gem_forge_payouts', JSON.stringify(allPayouts));
             loadPendingPayouts();
+            loadUserPayoutHistory();
           });
           listContainer.appendChild(row);
         });
@@ -685,7 +692,6 @@
           document.getElementById('detailCategory').innerText = `${o.typeTag} • Reward: +${o.reward} Gems`;
           document.getElementById('detailDesc').innerText = o.desc;
           
-          // Connect direct offer completion button to instantly credit +500 gems
           const startBtn = document.getElementById('startTaskBtn');
           startBtn.onclick = async (e) => {
             e.preventDefault();
@@ -732,7 +738,14 @@
         userPayouts.forEach(p => {
           const item = document.createElement('div');
           item.className = "bg-[#0b0f19] p-2 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
-          item.innerHTML = `<div><span class="font-bold text-white">${p.reward}</span><p class="text-[10px] text-gray-400">Dest: ${p.destination}</p></div><span class="text-amber-400 font-semibold text-[11px]">Pending</span>`;
+          
+          // Show different badges depending on whether it's Pending or Paid
+          let statusBadge = `<span class="text-amber-400 font-semibold text-[11px]">Pending</span>`;
+          if (p.status === 'Paid') {
+            statusBadge = `<span class="text-emerald-400 font-semibold text-[11px]"><i class="fa-solid fa-check mr-1"></i> Paid</span>`;
+          }
+
+          item.innerHTML = `<div><span class="font-bold text-white">${p.reward}</span><p class="text-[10px] text-gray-400">Dest: ${p.destination}</p></div>${statusBadge}`;
           historyContainer.appendChild(item);
         });
       }
@@ -751,6 +764,7 @@
           user: currentUser ? (currentUser.user_metadata?.username || currentUser.email) : 'User',
           reward: selectedRewardName,
           destination: input,
+          status: 'Pending',
           date: new Date().toLocaleTimeString()
         });
         localStorage.setItem('gem_forge_payouts', JSON.stringify(existingPayouts));
