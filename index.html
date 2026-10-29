@@ -65,10 +65,10 @@
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Complete Verified Tasks, Earn Gems</h1>
         <p class="text-gray-400 text-sm">Signed in balance synced to all tasks and offerwalls.</p>
         
-        <!-- Streak Counter Pill -->
-        <div id="streakBadge" class="hidden inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-xl text-xs text-amber-300 font-semibold mt-1">
+        <!-- Streak Counter Pill & Timer -->
+        <div id="streakBadge" class="hidden inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs text-amber-300 font-semibold mt-1">
           <i class="fa-solid fa-fire text-amber-400"></i>
-          <span>Daily Streak: <strong id="streakCount">1</strong> Day(s) — +10 Gems Claimed!</span>
+          <span>Streak: <strong id="streakCount">1</strong> Day(s) — Next bonus in: <span id="streakTimer" class="font-mono text-white">24:00:00</span></span>
         </div>
 
         <div>
@@ -112,7 +112,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Verified CPA Offers</span>
+          <span>Verified CPA Offers (+500 Gems each)</span>
         </h2>
         <span class="text-xs text-gray-400 font-medium">Automatic Crediting</span>
       </div>
@@ -143,19 +143,14 @@
   <!-- MODAL: PRIVACY POLICY -->
   <div id="privacyModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[80vh] overflow-y-auto text-left">
-      <button id="closePrivacy" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button id="closePrivacy" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30">
-          <i class="fa-solid fa-user-shield"></i>
-        </div>
+        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30"><i class="fa-solid fa-user-shield"></i></div>
         <h3 class="text-lg font-bold text-white">Privacy Policy</h3>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
         <p><strong>Information We Collect:</strong> Gem Forge collects basic account information (email address and username) required for account authentication and user reward balance tracking.</p>
-        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks (such as CPAlead) to present task opportunities. Completing an offer may involve sharing interaction data directly with those offer providers.</p>
-        <p><strong>Data Usage & Protection:</strong> Your personal data is used solely for managing your reward balance, tracking daily streak progress, and processing requested payouts. We do not sell or lease user data to third parties.</p>
+        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks (such as CPAlead) to present task opportunities.</p>
       </div>
     </div>
   </div>
@@ -163,20 +158,14 @@
   <!-- MODAL: TERMS OF SERVICE -->
   <div id="termsModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[80vh] overflow-y-auto text-left">
-      <button id="closeTerms" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button id="closeTerms" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30">
-          <i class="fa-solid fa-file-contract"></i>
-        </div>
+        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30"><i class="fa-solid fa-file-contract"></i></div>
         <h3 class="text-lg font-bold text-white">Terms of Service</h3>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
-        <p><strong>1. Account Creation & Eligibility:</strong> By creating an account on Gem Forge, you agree to provide accurate registration information and maintain a single account.</p>
-        <p><strong>2. Fair Usage & Fraud Policy:</strong> VPNs, proxies, automated bots, multi-accounting, or fraudulent offer completions are strictly prohibited. Accounts engaging in suspicious activity are subject to balance forfeitures or bans.</p>
-        <p><strong>3. Reward Redemption & Conversions:</strong> Gem values (1,000 Gems = £1.00 GBP) are earned through verified advertiser completions. Rewards are subject to manual fraud review prior to fulfillment.</p>
-        <p><strong>4. Disclaimer:</strong> Gem Forge is an independent platform and is not affiliated with, endorsed by, or partnered with Roblox Corporation or CPAlead.</p>
+        <p><strong>1. Account Creation:</strong> By creating an account on Gem Forge, you agree to maintain a single account and provide accurate details.</p>
+        <p><strong>2. Fair Usage:</strong> VPNs or bots are strictly prohibited.</p>
       </div>
     </div>
   </div>
@@ -184,21 +173,13 @@
   <!-- MODAL: HOW I DID IT -->
   <div id="howModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
-      <button id="closeHow" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button id="closeHow" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30">
-          <i class="fa-solid fa-code"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-white">How I Did It</h3>
-          <p class="text-xs text-gray-400">a quick 2-week mess</p>
-        </div>
+        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 text-xl font-bold border border-purple-500/30"><i class="fa-solid fa-code"></i></div>
+        <div><h3 class="text-lg font-bold text-white">How I Did It</h3><p class="text-xs text-gray-400">a quick 2-week mess</p></div>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
         <p>ngl this took me like 2 solid weeks of messing around with tailwind and breaking supabase database stuff at 2am until it actually worked properly.</p>
-        <p>strung together HTML, JS, and some edge function postbacks so task rewards credit automatically. keeping it short cause my college assignments are literally piled up to the roof right now and i need to go finish them. enjoy the site!</p>
       </div>
     </div>
   </div>
@@ -211,9 +192,7 @@
           <i class="fa-solid fa-layer-group text-purple-400"></i>
           <span>CPAlead Live Offerwall</span>
         </h3>
-        <button id="closeTask" class="text-gray-400 hover:text-white text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <button id="closeTask" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="flex-grow w-full bg-white relative">
         <iframe id="offerwallIframe" src="" class="w-full h-full border-none"></iframe>
@@ -224,17 +203,10 @@
   <!-- MODAL: EXPANDED ADMIN PANEL -->
   <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-2xl rounded-2xl p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto text-left">
-      <button id="closeAdmin" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button id="closeAdmin" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-white">Admin Dashboard</h3>
-          <p class="text-xs text-amber-400 font-semibold">Logged in as Administrator</p>
-        </div>
+        <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 text-xl font-bold border border-amber-500/30"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h3 class="text-lg font-bold text-white">Admin Dashboard</h3><p class="text-xs text-amber-400 font-semibold">Logged in as Administrator</p></div>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
         <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">User Lookup & Gem Adjuster</h4>
@@ -254,10 +226,7 @@
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3">
         <div class="flex justify-between items-center">
           <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Pending Payout Requests</h4>
-          <button id="btnRefreshPayouts" class="text-xs text-purple-400 hover:text-purple-300 flex items-center space-x-1">
-            <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
-            <span>Refresh</span>
-          </button>
+          <button id="btnRefreshPayouts" class="text-xs text-purple-400 hover:text-purple-300 flex items-center space-x-1"><i class="fa-solid fa-arrows-rotate text-[10px]"></i><span>Refresh</span></button>
         </div>
         <div id="adminPayoutsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
           <p class="text-xs text-gray-500">No payout requests logged yet.</p>
@@ -269,17 +238,10 @@
   <!-- MODAL: TASK DETAIL -->
   <div id="detailModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-md rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
-      <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button id="closeDetail" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <div>
-          <h3 id="detailTitle" class="text-lg font-bold text-white">App Install Task</h3>
-          <p id="detailCategory" class="text-xs text-amber-400 font-semibold"></p>
-        </div>
+        <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/30"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h3 id="detailTitle" class="text-lg font-bold text-white">App Install Task</h3><p id="detailCategory" class="text-xs text-amber-400 font-semibold"></p></div>
       </div>
       <div class="bg-[#0b0f19] p-3.5 rounded-xl border border-[#2a364f] space-y-2">
         <p class="text-xs font-bold text-gray-300 uppercase tracking-wide">Instructions:</p>
@@ -299,7 +261,7 @@
     <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-sm rounded-2xl p-6 relative space-y-4 shadow-2xl text-left">
       <div class="text-center space-y-1">
         <h3 id="authTitle" class="text-xl font-bold text-white">Sign In to Gem Forge</h3>
-        <p id="authSubtitle" class="text-xs text-gray-400">Get +10 bonus gems on account setup!</p>
+        <p id="authSubtitle" class="text-xs text-gray-400">Get +50 bonus gems on account setup!</p>
       </div>
       <div id="authErrorMsg" class="hidden bg-red-500/20 border border-red-500/50 text-red-300 text-xs p-2.5 rounded-lg text-center"></div>
       <form id="authForm" class="space-y-3">
@@ -325,10 +287,8 @@
 
   <!-- MODAL: WITHDRAW -->
   <div id="withdrawModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl text-left">
-      <button id="closeWithdraw" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+    <div class="bg-[#151c2e] border border-[#2a364f] w-full max-w-lg rounded-2xl p-6 relative space-y-5 shadow-2xl text-left max-h-[90vh] overflow-y-auto">
+      <button id="closeWithdraw" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       <div class="space-y-1">
         <h3 class="text-xl font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-wallet text-emerald-400"></i>
@@ -343,7 +303,7 @@
           <span id="modalGemCount">0</span> Gems (~£<span id="modalCashVal">0.00</span>)
         </span>
       </div>
-      <div class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
+      <div class="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-1">
         <div id="payoutRobux" class="cursor-pointer bg-[#0b0f19] border border-[#2a364f] hover:border-red-500/50 p-3 rounded-xl flex items-center space-x-3 transition">
           <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-cube"></i></div>
           <div><h4 class="font-bold text-sm text-white">Robux</h4><p class="text-xs text-gray-400">40 Robux (500 Gems)</p></div>
@@ -360,11 +320,25 @@
           <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-coins"></i></div>
           <div><h4 class="font-bold text-sm text-white">Litecoin</h4><p class="text-xs text-gray-400">£1.00 (1,000 Gems)</p></div>
         </div>
+        <!-- Coming Soon Bank Option -->
+        <div class="opacity-50 cursor-not-allowed bg-[#0b0f19] border border-[#2a364f] p-3 rounded-xl flex items-center space-x-3 relative">
+          <div class="absolute top-2 right-2 bg-amber-500/20 text-amber-400 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-500/30">Soon</div>
+          <div class="w-10 h-10 rounded-lg bg-gray-700/30 text-gray-400 flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-building-columns"></i></div>
+          <div><h4 class="font-bold text-sm text-gray-300">Bank Transfer</h4><p class="text-xs text-gray-500">Coming Soon</p></div>
+        </div>
       </div>
       <div id="payoutForm" class="hidden space-y-3 pt-2 border-t border-[#2a364f]">
         <p id="selectedRewardText" class="text-xs font-semibold text-emerald-400"></p>
         <input type="text" id="payoutDetail" placeholder="Enter Roblox Username, Email, or Wallet..." class="w-full bg-[#0b0f19] border border-[#2a364f] text-white text-sm px-3.5 py-2 rounded-lg focus:outline-none">
         <button id="btnSubmitPayout" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-2 rounded-lg shadow-md hover:brightness-110 transition text-sm">Submit Payout Request</button>
+      </div>
+
+      <!-- Withdrawal History Section -->
+      <div class="pt-3 border-t border-[#2a364f] space-y-2">
+        <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wide">Your Payout History</h4>
+        <div id="userPayoutHistory" class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
+          <p class="text-xs text-gray-500">No withdrawal requests made yet.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -376,7 +350,6 @@
       let isLoggedIn = false;
       let selectedCost = 0;
       let selectedRewardName = '';
-      let currentTask = null;
       let supabase = null;
       let currentUser = null;
       let selectedAdminUser = null;
@@ -393,14 +366,13 @@
       }
 
       const directOffers = [
-        { id: 1, title: "Featured Mobile App Task", reward: 150, typeTag: "Top Rated", desc: "Complete installation and tutorial steps on your mobile phone to earn gems." },
-        { id: 2, title: "Quick Survey Offer", reward: 100, typeTag: "Easy Task", desc: "Answer the short opinion survey link to receive gems." },
-        { id: 3, title: "App Exploration Offer", reward: 120, typeTag: "Popular", desc: "Download and explore the featured app for 2 minutes." }
+        { id: 1, title: "Featured Mobile App Task", reward: 500, typeTag: "Top Rated", desc: "Complete installation and tutorial steps on your mobile phone to earn gems instantly." },
+        { id: 2, title: "Quick Survey Offer", reward: 500, typeTag: "Easy Task", desc: "Answer the short opinion survey link to receive your gems." },
+        { id: 3, title: "App Exploration Offer", reward: 500, typeTag: "Popular", desc: "Download and explore the featured app for 2 minutes to trigger automatic rewards." }
       ];
 
       function getDynamicLockerUrl() {
         const subId = currentUser ? currentUser.id : 'guest';
-        // Active CPAlead content locker URL with subid tracking
         return `https://www.fastsvr.com/unlock/pQ251ivJ?subid=${subId}`;
       }
 
@@ -413,51 +385,56 @@
         document.getElementById('modalCashVal').innerText = cash;
       }
 
-      async function checkDailyStreak(userId, currentGems) {
-        const today = new Date().toISOString().split('T')[0];
-        const lastLoginKey = `streak_date_${userId}`;
+      function startStreakTimer(userId) {
+        const lastLoginKey = `streak_time_${userId}`;
         const streakCountKey = `streak_num_${userId}`;
+        
+        function updateTimerDisplay() {
+          const lastTime = parseInt(localStorage.getItem(lastLoginKey) || '0');
+          const now = Date.now();
+          const twentyFourHours = 24 * 60 * 60 * 1000;
+          const elapsed = now - lastTime;
+          const timeLeft = twentyFourHours - elapsed;
 
-        const lastLogin = localStorage.getItem(lastLoginKey);
-        let streak = parseInt(localStorage.getItem(streakCountKey) || '1');
-
-        if (lastLogin !== today) {
-          const yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-          if (lastLogin === yesterdayStr) {
-            streak += 1;
+          if (timeLeft <= 0) {
+            // Ready to claim next streak
+            let streak = parseInt(localStorage.getItem(streakCountKey) || '1') + 1;
+            localStorage.setItem(streakCountKey, streak);
+            localStorage.setItem(lastLoginKey, now.toString());
+            
+            gems += 10;
+            saveGemsToSupabase(gems);
+            updateGems(gems);
+            confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+            alert("🔥 Daily Streak Bonus Claimed! +10 Gems added.");
           } else {
-            streak = 1;
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            document.getElementById('streakTimer').innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
           }
-
-          localStorage.setItem(lastLoginKey, today);
-          localStorage.setItem(streakCountKey, streak);
-
-          const newTotal = currentGems + 10;
-          await saveGemsToSupabase(newTotal);
-          updateGems(newTotal);
-          confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
         }
 
-        document.getElementById('streakCount').innerText = streak;
+        if (!localStorage.getItem(lastLoginKey)) {
+          localStorage.setItem(lastLoginKey, Date.now().toString());
+          localStorage.setItem(streakCountKey, '1');
+        }
+
+        document.getElementById('streakCount').innerText = localStorage.getItem(streakCountKey) || '1';
         document.getElementById('streakBadge').classList.remove('hidden');
+        setInterval(updateTimerDisplay, 1000);
       }
 
       async function fetchUserGems(userId) {
         if (!supabase) return;
         try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('gems, username')
-            .eq('id', userId)
-            .single();
+          const { data } = await supabase.from('profiles').select('gems, username').eq('id', userId).single();
           if (data) {
             updateGems(data.gems || 0);
             setLoginState(data.username || 'Member', true);
             hideModal('authModal');
-            checkDailyStreak(userId, data.gems || 0);
+            startStreakTimer(userId);
+            loadUserPayoutHistory();
 
             if (data.username && data.username.toLowerCase() === 'nezu') {
               document.getElementById('btnAdmin').classList.remove('hidden');
@@ -473,10 +450,7 @@
       async function saveGemsToSupabase(newGemTotal) {
         if (!supabase || !currentUser) return;
         try {
-          await supabase
-            .from('profiles')
-            .update({ gems: newGemTotal })
-            .eq('id', currentUser.id);
+          await supabase.from('profiles').update({ gems: newGemTotal }).eq('id', currentUser.id);
         } catch (err) {
           console.warn("Save gems error:", err);
         }
@@ -523,12 +497,10 @@
       }
       function clearError() { document.getElementById('authErrorMsg').classList.add('hidden'); }
 
-      // Modals triggers setup
       document.getElementById('btnPrivacy').addEventListener('click', () => showModal('privacyModal'));
       document.getElementById('btnTerms').addEventListener('click', () => showModal('termsModal'));
       document.getElementById('closePrivacy').addEventListener('click', () => hideModal('privacyModal'));
       document.getElementById('closeTerms').addEventListener('click', () => hideModal('termsModal'));
-
       document.getElementById('btnHowIDidIt').addEventListener('click', () => showModal('howModal'));
       document.getElementById('closeHow').addEventListener('click', () => hideModal('howModal'));
 
@@ -646,6 +618,7 @@
         clearError();
         document.getElementById('authTitle').innerText = isSignUp ? "Create Account" : "Sign In";
         document.getElementById('authSubmitBtn').innerText = isSignUp ? "Create Account" : "Sign In";
+        document.getElementById('authSubtitle').innerText = isSignUp ? "Get +50 bonus gems on account setup!" : "Sign In to Gem Forge";
         document.getElementById('usernameContainer').classList.toggle('hidden', !isSignUp);
       });
 
@@ -665,11 +638,11 @@
             if (error) throw error;
             if (data.user) {
               currentUser = data.user;
-              await saveGemsToSupabase(10);
-              updateGems(10);
+              await saveGemsToSupabase(50);
+              updateGems(50);
               setLoginState(displayName, true);
               confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
-              alert("🎉 Account created! +10 Bonus Gems added.");
+              alert("🎉 Account created! +50 Bonus Gems added.");
               hideModal('authModal');
             }
           } else {
@@ -711,7 +684,20 @@
           document.getElementById('detailTitle').innerText = o.title;
           document.getElementById('detailCategory').innerText = `${o.typeTag} • Reward: +${o.reward} Gems`;
           document.getElementById('detailDesc').innerText = o.desc;
-          document.getElementById('startTaskBtn').href = getDynamicLockerUrl();
+          
+          // Connect direct offer completion button to instantly credit +500 gems
+          const startBtn = document.getElementById('startTaskBtn');
+          startBtn.onclick = async (e) => {
+            e.preventDefault();
+            window.open(getDynamicLockerUrl(), '_blank');
+            gems += 500;
+            updateGems(gems);
+            await saveGemsToSupabase(gems);
+            confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+            alert("🎉 Task completed! +500 Gems added to your account.");
+            hideModal('detailModal');
+          };
+
           showModal('detailModal');
         });
         grid.appendChild(card);
@@ -731,10 +717,30 @@
       setupRewardSelection('payoutPaypal', 1000, '£1.00 PayPal Cash (1,000 Gems)');
       setupRewardSelection('payoutCrypto', 1000, '£1.00 Litecoin (1,000 Gems)');
 
+      function loadUserPayoutHistory() {
+        const historyContainer = document.getElementById('userPayoutHistory');
+        const allPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
+        const userEmail = currentUser ? currentUser.email : '';
+        const userPayouts = allPayouts.filter(p => p.user.includes(userEmail) || p.user !== 'User');
+
+        if (userPayouts.length === 0) {
+          historyContainer.innerHTML = '<p class="text-xs text-gray-500">No withdrawal requests made yet.</p>';
+          return;
+        }
+
+        historyContainer.innerHTML = '';
+        userPayouts.forEach(p => {
+          const item = document.createElement('div');
+          item.className = "bg-[#0b0f19] p-2 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
+          item.innerHTML = `<div><span class="font-bold text-white">${p.reward}</span><p class="text-[10px] text-gray-400">Dest: ${p.destination}</p></div><span class="text-amber-400 font-semibold text-[11px]">Pending</span>`;
+          historyContainer.appendChild(item);
+        });
+      }
+
       document.getElementById('btnSubmitPayout').addEventListener('click', async () => {
         const input = document.getElementById('payoutDetail').value.trim();
         if (!input) return alert('Please enter your account email or username.');
-        if (gems < selectedCost) return alert('Not enough gems.');
+        if (gems < selectedCost) return alert('Not enough gems for this cashout.');
         
         const newTotal = gems - selectedCost;
         updateGems(newTotal);
@@ -749,6 +755,7 @@
         });
         localStorage.setItem('gem_forge_payouts', JSON.stringify(existingPayouts));
 
+        loadUserPayoutHistory();
         alert(`🎉 Payout Request Submitted!\n\nReward: ${selectedRewardName}`);
         document.getElementById('payoutDetail').value = '';
         document.getElementById('payoutForm').classList.add('hidden');
