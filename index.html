@@ -150,7 +150,6 @@
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
         <p><strong>Information We Collect:</strong> Gem Forge collects basic account information (email address and username) required for account authentication and user reward balance tracking.</p>
-        <p><strong>Third-Party Offer Networks:</strong> We integrate third-party offer networks (such as CPAlead) to present task opportunities.</p>
       </div>
     </div>
   </div>
@@ -164,8 +163,7 @@
         <h3 class="text-lg font-bold text-white">Terms of Service</h3>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
-        <p><strong>1. Account Creation:</strong> By creating an account on Gem Forge, you agree to maintain a single account and provide accurate details.</p>
-        <p><strong>2. Fair Usage:</strong> VPNs or bots are strictly prohibited.</p>
+        <p><strong>1. Account Creation:</strong> By creating an account on Gem Forge, you agree to maintain a single account.</p>
       </div>
     </div>
   </div>
@@ -229,7 +227,7 @@
           <button id="btnRefreshPayouts" class="text-xs text-purple-400 hover:text-purple-300 flex items-center space-x-1"><i class="fa-solid fa-arrows-rotate text-[10px]"></i><span>Refresh</span></button>
         </div>
         <div id="adminPayoutsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-          <p class="text-xs text-gray-500">No payout requests logged yet.</p>
+          <p class="text-xs text-gray-500">No pending payout requests logged.</p>
         </div>
       </div>
     </div>
@@ -593,7 +591,6 @@
       function loadPendingPayouts() {
         const listContainer = document.getElementById('adminPayoutsList');
         const allPayouts = JSON.parse(localStorage.getItem('gem_forge_payouts') || '[]');
-        // Only show pending payouts in the admin action queue
         const pendingPayouts = allPayouts.filter(p => p.status === 'Pending');
 
         if (pendingPayouts.length === 0) {
@@ -608,7 +605,6 @@
           row.innerHTML = `<div><p class="font-bold text-white">${p.reward} (${p.user})</p><p class="text-[11px] text-emerald-400 font-mono">${p.destination}</p></div><button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded text-[11px]">Mark Paid</button>`;
           
           row.querySelector('button').addEventListener('click', () => {
-            // Find and mark as Paid in main storage instead of deleting
             p.status = 'Paid';
             localStorage.setItem('gem_forge_payouts', JSON.stringify(allPayouts));
             loadPendingPayouts();
@@ -739,7 +735,6 @@
           const item = document.createElement('div');
           item.className = "bg-[#0b0f19] p-2 rounded-lg border border-[#2a364f] flex justify-between items-center text-xs";
           
-          // Show different badges depending on whether it's Pending or Paid
           let statusBadge = `<span class="text-amber-400 font-semibold text-[11px]">Pending</span>`;
           if (p.status === 'Paid') {
             statusBadge = `<span class="text-emerald-400 font-semibold text-[11px]"><i class="fa-solid fa-check mr-1"></i> Paid</span>`;
