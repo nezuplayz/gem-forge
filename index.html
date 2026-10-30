@@ -28,27 +28,45 @@
         </span>
       </div>
 
-      <!-- Balance & Actions -->
-      <div class="flex items-center space-x-2 sm:space-x-3">
+      <!-- Balance & Profile Dropdown Area -->
+      <div class="flex items-center space-x-3">
         <div class="bg-[#0b0f19] border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center space-x-2 glow-gold">
           <i class="fa-solid fa-gem text-amber-400"></i>
           <span id="gemCount" class="font-bold text-amber-300">0</span>
-          <span class="text-xs text-gray-400 font-medium">(~£<span id="cashVal">0.00</span>)</span>
+          <span class="text-xs text-gray-400 font-medium hidden sm:inline">(~£<span id="cashVal">0.00</span>)</span>
         </div>
-        
-        <button id="btnWithdraw" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-md hover:brightness-110 transition flex items-center space-x-1.5 text-sm">
-          <i class="fa-solid fa-wallet"></i>
-          <span class="hidden sm:inline">Withdraw</span>
-        </button>
 
-        <button id="btnAdmin" class="hidden bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm flex items-center space-x-1.5">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span class="hidden sm:inline">Admin</span>
-        </button>
-
-        <button id="btnAuth" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm">
+        <!-- Login / Open Auth Button if logged out -->
+        <button id="btnAuth" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-1.5 rounded-lg shadow-md transition text-sm">
           Login / Sign Up
         </button>
+
+        <!-- Dropdown Menu Wrapper (Visible when logged in) -->
+        <div id="profileDropdownContainer" class="hidden relative">
+          <button id="btnProfileMenu" class="bg-[#0b0f19] border border-purple-500/40 hover:border-purple-400 text-white font-bold px-3 py-1.5 rounded-lg flex items-center space-x-2 transition text-sm">
+            <i class="fa-solid fa-circle-user text-purple-400"></i>
+            <span id="navUsername" class="max-w-[90px] truncate">Account</span>
+            <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+          </button>
+
+          <!-- Dropdown Popup Content -->
+          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-[#151c2e] border border-[#2a364f] rounded-xl shadow-2xl py-2 z-50 text-left">
+            <button id="dropWithdraw" class="w-full text-left px-4 py-2 text-xs text-gray-200 hover:bg-purple-600/20 hover:text-amber-300 flex items-center space-x-2 transition">
+              <i class="fa-solid fa-wallet text-emerald-400 w-4"></i>
+              <span>Withdraw Rewards</span>
+            </button>
+            <button id="dropAdmin" class="hidden w-full text-left px-4 py-2 text-xs text-gray-200 hover:bg-amber-600/20 hover:text-amber-300 flex items-center space-x-2 transition">
+              <i class="fa-solid fa-shield-halved text-amber-400 w-4"></i>
+              <span>Admin Dashboard</span>
+            </button>
+            <div class="border-t border-[#2a364f] my-1"></div>
+            <button id="dropLogout" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/20 flex items-center space-x-2 transition">
+              <i class="fa-solid fa-right-from-bracket w-4"></i>
+              <span>Log Out</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   </header>
@@ -112,7 +130,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold text-white flex items-center space-x-2">
           <i class="fa-solid fa-bolt text-amber-400"></i>
-          <span>Verified CPA Offers (+500 Gems each)</span>
+          <span>Featured Tasks</span>
         </h2>
         <span class="text-xs text-gray-400 font-medium">Automatic Crediting</span>
       </div>
@@ -149,7 +167,7 @@
         <h3 class="text-lg font-bold text-white">Privacy Policy</h3>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
-        <p><strong>Information We Collect:</strong> Gem Forge collects basic account information (email address and username) required for account authentication and user reward balance tracking.</p>
+        <p><strong>Information We Collect:</strong> Gem Forge collects basic account information required for account authentication and reward tracking.</p>
       </div>
     </div>
   </div>
@@ -163,7 +181,7 @@
         <h3 class="text-lg font-bold text-white">Terms of Service</h3>
       </div>
       <div class="bg-[#0b0f19] p-4 rounded-xl border border-[#2a364f] space-y-3 text-xs text-gray-300 leading-relaxed">
-        <p><strong>1. Account Creation:</strong> By creating an account on Gem Forge, you agree to maintain a single account.</p>
+        <p><strong>1. Account Creation:</strong> By creating an account, you agree to maintain a single account.</p>
       </div>
     </div>
   </div>
@@ -247,7 +265,7 @@
       </div>
       <div class="space-y-3 pt-1">
         <a id="startTaskBtn" href="#" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 shadow-md transition text-sm">
-          <span>Launch Offer in CPAlead</span>
+          <span>Launch Offer</span>
           <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         </a>
       </div>
@@ -364,9 +382,9 @@
       }
 
       const directOffers = [
-        { id: 1, title: "Featured Mobile App Task", reward: 500, typeTag: "Top Rated", desc: "Complete installation and tutorial steps on your mobile phone to earn gems instantly." },
-        { id: 2, title: "Quick Survey Offer", reward: 500, typeTag: "Easy Task", desc: "Answer the short opinion survey link to receive your gems." },
-        { id: 3, title: "App Exploration Offer", reward: 500, typeTag: "Popular", desc: "Download and explore the featured app for 2 minutes to trigger automatic rewards." }
+        { id: 1, title: "Mobile App Installation", reward: 300, typeTag: "Top Rated", desc: "Install and run the featured mobile application to complete this task.", url: "https://www.fastsvr.com/unlock/pQ251ivJ" },
+        { id: 2, title: "Opinion Survey Task", reward: 200, typeTag: "Easy Task", desc: "Complete the quick market research questionnaire.", url: "https://www.fastsvr.com/unlock/pQ251ivJ" },
+        { id: 3, title: "App Engagement Goal", reward: 400, typeTag: "Popular", desc: "Launch the app and reach level 2 to unlock reward.", url: "https://www.fastsvr.com/unlock/pQ251ivJ" }
       ];
 
       function getDynamicLockerUrl() {
@@ -433,10 +451,11 @@
             startStreakTimer(userId);
             loadUserPayoutHistory();
 
-            if (data.username && data.username.toLowerCase() === 'nezu') {
-              document.getElementById('btnAdmin').classList.remove('hidden');
+            const username = data.username ? data.username.toLowerCase() : '';
+            if (username === 'nezu') {
+              document.getElementById('dropAdmin').classList.remove('hidden');
             } else {
-              document.getElementById('btnAdmin').classList.add('hidden');
+              document.getElementById('dropAdmin').classList.add('hidden');
             }
           }
         } catch (err) {
@@ -459,31 +478,43 @@
           currentUser = session.user;
           await fetchUserGems(currentUser.id);
         } else {
-          showModal('authModal');
+          setLoginState('Guest', false);
         }
       } else {
-        showModal('authModal');
+        setLoginState('Guest', false);
       }
 
       function setLoginState(username, loggedIn) {
         isLoggedIn = loggedIn;
         const authBtn = document.getElementById('btnAuth');
+        const dropdownContainer = document.getElementById('profileDropdownContainer');
         const badge = document.getElementById('userWelcomeBadge');
 
         if (isLoggedIn) {
           badge.innerText = `🔥 Welcome, ${username}`;
-          authBtn.innerText = "Log Out";
-          authBtn.className = "bg-red-600/80 hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg transition text-sm";
+          document.getElementById('navUsername').innerText = username;
+          authBtn.classList.add('hidden');
+          dropdownContainer.classList.remove('hidden');
         } else {
           badge.innerText = "🔒 Locked - Please Sign In";
-          authBtn.innerText = "Login / Sign Up";
-          authBtn.className = "bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-md transition text-sm";
-          document.getElementById('btnAdmin').classList.add('hidden');
+          authBtn.classList.remove('hidden');
+          dropdownContainer.classList.add('hidden');
           document.getElementById('streakBadge').classList.add('hidden');
           updateGems(0);
           showModal('authModal');
         }
       }
+
+      // Profile Dropdown Toggle Logic
+      const btnProfileMenu = document.getElementById('btnProfileMenu');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      btnProfileMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+      });
+      window.addEventListener('click', () => {
+        dropdownMenu.classList.add('hidden');
+      });
 
       function showModal(id) { document.getElementById(id).classList.remove('hidden'); }
       function hideModal(id) { document.getElementById(id).classList.add('hidden'); }
@@ -514,27 +545,23 @@
         });
       }
 
-      document.getElementById('btnAuth').addEventListener('click', () => {
-        if (isLoggedIn) {
-          if (confirm("Are you sure you want to log out?")) {
-            if (supabase) supabase.auth.signOut();
-            currentUser = null;
-            setLoginState('Guest', false);
-          }
-        } else {
-          showModal('authModal');
-        }
-      });
-
-      document.getElementById('btnWithdraw').addEventListener('click', () => {
-        if (!isLoggedIn) return showModal('authModal');
+      document.getElementById('btnAuth').addEventListener('click', () => showModal('authModal'));
+      
+      // Dropdown Actions
+      document.getElementById('dropWithdraw').addEventListener('click', () => {
         loadUserPayoutHistory();
         showModal('withdrawModal');
       });
-
-      document.getElementById('btnAdmin').addEventListener('click', () => {
+      document.getElementById('dropAdmin').addEventListener('click', () => {
         showModal('adminModal');
         loadPendingPayouts();
+      });
+      document.getElementById('dropLogout').addEventListener('click', () => {
+        if (confirm("Are you sure you want to log out?")) {
+          if (supabase) supabase.auth.signOut();
+          currentUser = null;
+          setLoginState('Guest', false);
+        }
       });
 
       document.getElementById('btnOffers').addEventListener('click', () => {
@@ -664,6 +691,7 @@
         }
       });
 
+      // Render Distinct Mini Offers
       const grid = document.getElementById('offerGrid');
       grid.innerHTML = '';
       directOffers.forEach(o => {
@@ -692,11 +720,22 @@
           startBtn.onclick = async (e) => {
             e.preventDefault();
             window.open(getDynamicLockerUrl(), '_blank');
-            gems += 500;
+            
+            // Anti-spam check per specific offer ID
+            const completedKey = `task_completed_${currentUser.id}_${o.id}`;
+            if (localStorage.getItem(completedKey)) {
+              alert("You have already completed this featured task!");
+              hideModal('detailModal');
+              return;
+            }
+
+            gems += o.reward;
             updateGems(gems);
             await saveGemsToSupabase(gems);
+            localStorage.setItem(completedKey, 'true');
+
             confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
-            alert("🎉 Task completed! +500 Gems added to your account.");
+            alert(`🎉 Task completed! +${o.reward} Gems added to your account.`);
             hideModal('detailModal');
           };
 
